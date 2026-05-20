@@ -1,0 +1,90 @@
+.canvas {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(87, 240, 221, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(11, 14, 24, 0.88), rgba(7, 9, 18, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.36);
+}
+
+.glow {
+  position: absolute;
+  inset: -20% auto auto -10%;
+  width: 360px;
+  height: 360px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(95, 82, 255, 0.24), transparent 68%);
+  pointer-events: none;
+  filter: blur(10px);
+}
+
+.heroCard,
+.metricCard {
+  position: relative;
+  display: grid;
+  gap: 12px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #93a9ff;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+.title {
+  max-width: 12ch;
+  margin: 0;
+  color: #f2f6ff;
+  font-family: var(--font-display), "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: clamp(2.8rem, 6vw, 5.4rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.description,
+.metricCard p {
+  max-width: 62ch;
+  margin: 0;
+  color: rgba(223, 232, 255, 0.72);
+  line-height: 1.7;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.metricCard {
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metricCard span {
+  color: #93a9ff;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.metricCard strong {
+  color: #f2f6ff;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
