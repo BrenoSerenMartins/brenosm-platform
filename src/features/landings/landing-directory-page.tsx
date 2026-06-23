@@ -3,7 +3,7 @@ import { InteractiveCard } from "@/src/components/motion/interactive-card";
 import { RevealGroup } from "@/src/components/motion/reveal-group";
 import { RevealItem } from "@/src/components/motion/reveal-item";
 import { landingRegistry } from "@/src/content/landings/registry";
-import styles from "@/src/features/home/home-page.module.css";
+import styles from "./landing-directory.module.css";
 
 export function LandingDirectoryPage() {
   return (

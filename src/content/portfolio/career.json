@@ -1,0 +1,43 @@
+[
+  {
+    "company": "Moving Pay",
+    "location": "Marília",
+    "role": "Programador Junior II",
+    "period": "Mar 2026 - presente",
+    "technologies": ["Node.js", "React.js", "JavaScript", "APIs REST", "CNAB"],
+    "deliveries": [
+      "Conciliação financeira, antecipação, taxas, SLC e processamento CNAB.",
+      "Correções de bugs, desenvolvimento de novos produtos e customização de funcionalidades.",
+      "Criação de APIs com Node.js e React.js."
+    ],
+    "summary": "Atuação no desenvolvimento e manutenção de soluções para fintech.",
+    "accent": "cyan"
+  },
+  {
+    "company": "Bizcommerce",
+    "location": "Marília",
+    "role": "Programador Pleno",
+    "period": "Out 2022 - Nov 2025",
+    "technologies": ["Magento 1/2", "PHP", "MySQL", "Redis", "Docker", "Varnish", "APIs REST/SOAP"],
+    "deliveries": [
+      "Criação e customização de módulos em Magento 1 e 2.",
+      "Integrações ERP via REST/SOAP, desenvolvimento de APIs e otimização de performance.",
+      "Implementação de novas funcionalidades, correção de bugs e evolução de sistemas e-commerce."
+    ],
+    "summary": "Desenvolvimento e manutenção de projetos Magento com integrações complexas.",
+    "accent": "violet"
+  },
+  {
+    "company": "Bizcommerce",
+    "location": "Marília",
+    "role": "Programador Júnior",
+    "period": "Nov 2020 - Out 2022",
+    "technologies": ["Magento", "PHP", "MySQL", "JavaScript"],
+    "deliveries": [
+      "Correções de bugs, desenvolvimento de módulos e customizações de funcionalidades existentes.",
+      "Participação em integrações e manutenção de sistemas voltados para e-commerce."
+    ],
+    "summary": "Sustentação e evolução de projetos Magento.",
+    "accent": "indigo"
+  }
+]

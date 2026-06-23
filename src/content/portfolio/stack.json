@@ -1,0 +1,22 @@
+[
+  {
+    "category": "Backend",
+    "technologies": ["PHP", "Magento", "Node.js", "JavaScript"],
+    "accent": "cyan"
+  },
+  {
+    "category": "Integrações",
+    "technologies": ["REST", "SOAP", "APIs", "ERP"],
+    "accent": "violet"
+  },
+  {
+    "category": "Infraestrutura",
+    "technologies": ["MySQL", "MariaDB", "Redis", "Varnish", "Docker", "Nginx", "Linux"],
+    "accent": "gold"
+  },
+  {
+    "category": "Arquitetura",
+    "technologies": ["MVC", "Service Layer", "Eloquent", "SOLID", "Clean Code"],
+    "accent": "indigo"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "how-much-love",
+    "title": "HowMuchLove",
+    "description": "SaaS focado em relacionamentos. Permite criar uma 'cápsula do tempo' com página personalizada, contador de relacionamento, galeria de fotos e música especial.",
+    "image": "/projects/howmuchlove-cover.avif",
+    "url": "https://howmuchlove.com.br",
+    "technologies": ["Next.js", "React", "TypeScript", "Tailwind"],
+    "type": "project"
+  },
+  {
+    "id": "tastly",
+    "title": "Tastly",
+    "description": "Plataforma operacional all-in-one para restaurantes. Solução unificada para gestão de canal próprio, pedidos, cozinha, estoque e branding.",
+    "image": "/projects/tastly/cover.svg",
+    "url": "https://tastly.com.br",
+    "technologies": ["React", "Supabase", "Node.js"],
+    "type": "project"
+  },
+  {
+    "id": "moving-pay",
+    "title": "MovingPay",
+    "description": "Soluções completas para Adquirentes, Subadquirentes e Marketplaces. Atuação em módulos de conciliação de recebíveis, gateway de pagamentos e obrigações regulatórias.",
+    "image": "/projects/movingpay-logo.png",
+    "url": "https://movingpay.com.br",
+    "technologies": ["Node.js", "React", "Next.js", "MySQL", "PostgreSQL", "AWS"],
+    "type": "experience"
+  },
+  {
+    "id": "bizcommerce",
+    "title": "Bizcommerce",
+    "description": "Potencializando e-commerces com evolução contínua. Desenvolvimento e sustentação de lojas virtuais personalizadas, infraestrutura escalável e integrações profundas.",
+    "image": "/projects/bizcommerce-logo.svg",
+    "url": "https://www.bizcommerce.com.br",
+    "technologies": ["PHP", "Magento 1 & 2", "Redis", "Elasticsearch", "MySQL"],
+    "type": "experience"
+  }
+]

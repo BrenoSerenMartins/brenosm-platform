@@ -1,0 +1,23 @@
+[
+  {
+    "quote": "Espaço reservado para depoimentos reais de clientes. O layout já está pronto para escalar sem reestruturar a interface.",
+    "name": "Depoimento 01",
+    "role": "Cliente / Produto",
+    "company": "Slot reservado",
+    "accent": "cyan"
+  },
+  {
+    "quote": "A experiência de compra, o sistema ou a landing podem entrar aqui quando as primeiras recomendações forem confirmadas.",
+    "name": "Depoimento 02",
+    "role": "Cliente / Operação",
+    "company": "Slot reservado",
+    "accent": "violet"
+  },
+  {
+    "quote": "O carrossel infinito está preparado para provas sociais reais sem mexer na estrutura visual do site.",
+    "name": "Depoimento 03",
+    "role": "Cliente / Tech Lead",
+    "company": "Slot reservado",
+    "accent": "gold"
+  }
+]

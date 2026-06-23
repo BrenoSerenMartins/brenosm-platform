@@ -1,37 +1,56 @@
 :root {
-  --bg: #060812;
-  --bg-strong: #090d19;
-  --surface: rgba(12, 15, 26, 0.84);
-  --surface-strong: rgba(7, 9, 17, 0.94);
-  --text: #f2f6ff;
-  --text-soft: rgba(223, 232, 255, 0.72);
-  --line: rgba(255, 255, 255, 0.1);
-  --accent: #8fa6ff;
-  --accent-soft: rgba(143, 166, 255, 0.12);
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
-  --radius-xl: 32px;
-  --radius-lg: 24px;
-  --radius-md: 18px;
+  color-scheme: dark;
+  --bg: #02040a;
+  --bg-elevated: #060913;
+  --surface: rgba(11, 15, 26, 0.72);
+  --surface-strong: rgba(7, 10, 18, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-border-strong: rgba(255, 255, 255, 0.12);
+  --text: #ffffff;
+  --text-soft: rgba(236, 242, 255, 0.74);
+  --text-muted: rgba(236, 242, 255, 0.52);
+  --accent-blue: #4f8dff;
+  --accent-cyan: #2bb7ff;
+  --accent-violet: #6d65ff;
+  --accent-orange: #ff7d34;
+  --accent-green: #2cff84;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
+  font-size: clamp(0.96rem, 0.92rem + 0.12vw, 1.02rem);
   scroll-behavior: smooth;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(61, 141, 255, 0.06), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(109, 101, 255, 0.05), transparent 22%),
+    linear-gradient(180deg, #05070d, #02040a 22%, #02040a);
 }
 
 body {
   margin: 0;
-  min-width: 320px;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(96, 82, 255, 0.18), transparent 22%),
-    radial-gradient(circle at 88% 12%, rgba(87, 240, 221, 0.12), transparent 18%),
-    radial-gradient(circle at 50% 100%, rgba(44, 61, 133, 0.2), transparent 34%),
-    linear-gradient(180deg, #05070f 0%, var(--bg) 48%, #04060d 100%);
+  min-width: 20rem;
+  overflow-x: clip;
+  background: transparent;
   color: var(--text);
-  font-family: var(--font-sans), "IBM Plex Sans", "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 a {
@@ -42,8 +61,32 @@ a {
 p,
 h1,
 h2,
-h3 {
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(61, 141, 255, 0.28);
+  color: #fff;
 }
 
 ul {

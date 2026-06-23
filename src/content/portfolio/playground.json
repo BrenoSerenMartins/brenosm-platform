@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Magento Lab",
+    "type": "Commerce",
+    "description": "Criação e customização de módulos em Magento 1 e 2, com foco em sustentação e evolução de funcionalidades.",
+    "tags": ["Magento", "PHP", "MVC"],
+    "accent": "cyan"
+  },
+  {
+    "title": "API Lab",
+    "type": "Integração",
+    "description": "APIs REST, SOAP e integração com ERP e outros sistemas externos em contextos de e-commerce e fintech.",
+    "tags": ["REST", "SOAP", "ERP"],
+    "accent": "violet"
+  },
+  {
+    "title": "Fintech Lab",
+    "type": "Domínio",
+    "description": "Conciliação financeira, antecipação, taxas, SLC e processamento CNAB com atenção às regras de negócio.",
+    "tags": ["CNAB", "Fintech", "Taxas"],
+    "accent": "indigo"
+  },
+  {
+    "title": "Infra Lab",
+    "type": "Infraestrutura",
+    "description": "MySQL/MariaDB, Redis, Varnish, Docker, Nginx e Linux aplicados a sistemas de produção.",
+    "tags": ["MySQL", "Redis", "Docker"],
+    "accent": "gold"
+  }
+]

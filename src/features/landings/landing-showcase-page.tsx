@@ -2,7 +2,7 @@ import Link from "next/link";
 import { RevealGroup } from "@/src/components/motion/reveal-group";
 import { RevealItem } from "@/src/components/motion/reveal-item";
 import type { LandingDefinition } from "@/src/types/content";
-import styles from "@/src/features/home/home-page.module.css";
+import styles from "./landing-showcase.module.css";
 
 type LandingShowcasePageProps = {
   landing: LandingDefinition;
@@ -40,7 +40,7 @@ export function LandingShowcasePage({ landing }: LandingShowcasePageProps) {
       <RevealGroup className={styles.closingLinks}>
         <RevealItem variant="soft">
           <Link href="/landings" className={styles.directoryLink}>
-            Back to directory
+            ← Back to directory
           </Link>
         </RevealItem>
       </RevealGroup>

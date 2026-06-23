@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Landing Pages de Conversão",
+    "description": "Estrutura comercial, SEO e performance para páginas que precisam vender, captar leads e sustentar campanhas.",
+    "highlights": ["Conversão", "SEO", "Performance", "Mobile first"],
+    "accent": "cyan"
+  },
+  {
+    "title": "Sistemas Web",
+    "description": "Dashboards, CRMs, ERPs e plataformas SaaS com foco em operação real e escalabilidade de produto.",
+    "highlights": ["Dashboards", "CRMs", "ERPs", "SaaS"],
+    "accent": "violet"
+  },
+  {
+    "title": "Integrações e Automações",
+    "description": "APIs, gateways de pagamento, ERP e fluxos automatizados para eliminar trabalho manual e reduzir atrito operacional.",
+    "highlights": ["APIs", "Gateways", "ERP", "Automações"],
+    "accent": "indigo"
+  },
+  {
+    "title": "Consultoria Técnica",
+    "description": "Arquitetura, performance e escalabilidade para projetos que precisam nascer certos e continuar crescendo sem retrabalho.",
+    "highlights": ["Arquitetura", "Performance", "Escalabilidade", "Direção técnica"],
+    "accent": "gold"
+  }
+]

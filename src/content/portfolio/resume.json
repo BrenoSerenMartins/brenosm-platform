@@ -1,0 +1,53 @@
+{
+  "summary": "Desenvolvedor Full Stack com foco em Backend e mais de 5 anos de experiência no desenvolvimento de aplicações web, e-commerce e sistemas financeiros. Especialista em Magento (1 e 2), com sólida atuação em desenvolvimento de módulos, integrações ERP (REST/SOAP), APIs e otimização de performance. Experiência com PHP, Node.js, JavaScript, React, MySQL/MariaDB, Redis, Docker, Varnish, Git, Composer, Nginx e Linux, aplicando princípios de SOLID, Clean Code e arquitetura MVC. Atualmente atuando no setor fintech, desenvolvendo soluções relacionadas a conciliação financeira, antecipação, taxas e processamento CNAB, além da criação e evolução de produtos e APIs escaláveis.",
+  "pdf": "/resume/breno-seren-martins-curriculo.pdf",
+  "education": [
+    {
+      "institution": "UNIVEM",
+      "course": "Ciências da Computação - Bacharel",
+      "period": "Concluído em dezembro de 2023",
+      "note": "Formação superior concluída."
+    },
+    {
+      "institution": "ETEC",
+      "course": "Informática Para Internet - Técnico",
+      "period": "Concluído em dezembro de 2019",
+      "note": "Formação técnica concluída."
+    },
+    {
+      "institution": "Fundação Bradesco",
+      "course": "Ensino Básico",
+      "period": "Concluído em dezembro de 2019",
+      "note": "Ensino básico concluído."
+    }
+  ],
+  "languages": ["Português - Nativo", "Inglês - Intermediário - B1"],
+  "skills": [
+    "PHP (Laravel, Magento 1 e 2)",
+    "REST / SOAP APIs",
+    "Payment Gateway Integrations",
+    "MySQL / MariaDB",
+    "Redis / Varnish",
+    "RabbitMQ (Queues)",
+    "Docker",
+    "Git (GitHub, GitLab)",
+    "Nginx, Linux",
+    "Composer",
+    "JavaScript (Node, React, Next TypeScript)",
+    "HTML",
+    "Python",
+    "MVC, Service Layer, Eloquent",
+    "SOLID, Clean Code",
+    "C# (Unity)"
+  ],
+  "awards": [
+    "3º Lugar | 5º Olimpíada de Informática para alunos do ensino médio",
+    "6º Lugar | 6º Olimpíada de Informática para alunos do ensino técnico"
+  ],
+  "contact": {
+    "email": "brenosm.dev@gmail.com",
+    "phone": "+55 (14) 98800-4041",
+    "linkedin": "brenoserenmartins",
+    "location": "Rua Maria Casadei, 148, Marília, São Paulo, 17511-774"
+  }
+}

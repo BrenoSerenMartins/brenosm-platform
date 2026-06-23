@@ -1,12 +1,12 @@
 export const siteConfig = {
-  name: "brenosm.cloud",
+  name: "Breno Seren",
   url: "https://brenosm.cloud",
-  title: "Breno Martins | Product Builder",
+  title: "Breno Seren | SaaS & Landing Pages de Alta Conversão",
   description:
-    "Personal platform for product work, landing pages, experiments, and selected projects.",
-  contactEmail: "hello@brenosm.cloud",
+    "Transformamos ideias em software. Construção de MVPs, SaaS, Sistemas Web e Landing Pages projetadas para performance e escala.",
+  contactEmail: "brenosm.dev@gmail.com",
   socialLinks: {
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "",
+    linkedin: "brenoserenmartins",
   },
 } as const;
