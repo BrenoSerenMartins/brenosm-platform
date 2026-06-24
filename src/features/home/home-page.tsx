@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import { motion, useScroll, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 import styles from "@/src/features/home/portfolio-page.module.css";
 import projectsData from "@/src/content/projects.json";
 
@@ -219,89 +218,6 @@ function MagneticWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-const SECTIONS = [
-  { id: "inicio", label: "Início" },
-  { id: "projetos", label: "Projetos" },
-  { id: "experiencias", label: "Experiência" },
-  { id: "contato", label: "Contato" },
-];
-
-function FloatingSummary() {
-  const { scrollYProgress } = useScroll();
-  const [activeSection, setActiveSection] = useState("inicio");
-
-  useEffect(() => {
-    const observers = SECTIONS.map(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(id);
-          }
-        },
-        { rootMargin: "-30% 0px -70% 0px" }
-      );
-      observer.observe(el);
-      return { el, observer };
-    });
-    return () => observers.forEach(obs => obs?.observer.unobserve(obs.el));
-  }, []);
-
-  return (
-    <motion.div
-      className={styles.floatingSummary}
-      initial={{ opacity: 0, filter: "blur(10px)" }}
-      animate={{ opacity: 0.25, filter: "blur(0px)" }}
-      whileHover={{ opacity: 1 }}
-      transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {/* Linha guia e orbe que acompanha o scroll fisicamente */}
-      <div className={styles.summaryTrackContainer}>
-        {/* O rastro de luz que preenche a linha */}
-        <motion.div
-          className={styles.summaryTrackFill}
-          style={{
-            scaleY: scrollYProgress,
-            originY: 0,
-          }}
-        />
-        {/* A ponta brilhante (orbe) */}
-        <motion.div
-          className={styles.summaryActiveOrbScroll}
-          style={{
-            top: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]),
-          }}
-        />
-      </div>
-
-      {SECTIONS.map((section, index) => {
-        const activeIndex = SECTIONS.findIndex(s => s.id === activeSection);
-        const isActive = activeSection === section.id;
-        const isPassed = index <= activeIndex;
-        return (
-          <a
-            key={section.id}
-            href={`#${section.id}`}
-            className={styles.summaryItem}
-            data-active={isActive}
-            data-passed={isPassed}
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            <div className={styles.summaryOrbContainer}>
-              <div className={styles.summaryOrb} />
-            </div>
-            <span className={styles.summaryLabel} data-active={isActive} data-passed={isPassed}>{section.label}</span>
-          </a>
-        );
-      })}
-    </motion.div>
-  );
-}
-
 export function HomePage() {
   const { scrollYProgress } = useScroll();
 
@@ -313,7 +229,6 @@ export function HomePage() {
       {/* Background animado de paralax */}
       <motion.div className={styles.parallaxGlow} style={{ y: yParallax1, top: "20%", left: "-10%", background: "radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(2,4,10,0) 70%)" }} />
       <motion.div className={styles.parallaxGlow} style={{ y: yParallax2, top: "60%", right: "-10%", background: "radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(2,4,10,0) 70%)" }} />
-      <FloatingSummary />
 
       <div className={styles.glowTop} />
 

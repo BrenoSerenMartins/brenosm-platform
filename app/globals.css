@@ -14,7 +14,7 @@
   --accent-violet: #6d65ff;
   --accent-orange: #ff7d34;
   --accent-green: #2cff84;
-  --font-sans: var(--font-inter), "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 * {
