@@ -1,31 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { HeroScene } from "@/src/features/home/components/hero-scene";
+import { useEffect, useState } from "react";
+import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 import styles from "@/src/features/home/portfolio-page.module.css";
 import projectsData from "@/src/content/projects.json";
 
-type ProjectCard = {
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-};
-
-type BentoFeature = {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  large?: boolean;
-};
-
-const techMarquee = [
-  "Next.js", "React", "TypeScript", "Node.js", "PostgreSQL", 
-  "Supabase", "Framer Motion", "Figma", "Docker", "AWS", "Next.js", "React", "TypeScript"
+const baseMarquee = [
+  "Next.js", "React", "TypeScript", "Node.js", "PostgreSQL",
+  "Supabase", "Framer Motion", "Figma", "Docker", "AWS",
 ];
 
-const bentoFeatures: BentoFeature[] = [
+// Repetimos 4 vezes para preencher bem a tela em 4K e metade (50%) ser exatamente 2 repetições completas.
+const techMarquee = [...baseMarquee, ...baseMarquee, ...baseMarquee, ...baseMarquee];
+
+const bentoFeatures = [
   {
     title: "Velocidade de Entrega",
     description: "Sua ideia não pode esperar. Construímos MVPs e LPs de forma ágil para você validar e tracionar no mercado rapidamente.",
@@ -75,74 +64,336 @@ function ArrowIcon() {
   );
 }
 
-export function HomePage() {
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+};
+
+function TiltCard({ children, className, idx = 0 }: { children: React.ReactNode; className?: string; idx?: number }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 40 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 40 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+
+  // Calculate mouse position for the glare effect
+  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"]);
+  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    x.set(mouseX / width - 0.5);
+    y.set(mouseY / height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
-    <main className={styles.pageShell}>
-      <div className={styles.glowTop} />
-
-      {/* Hero Wrapper */}
-      <div className={styles.heroWrapper}>
-        {/* Hero Section */}
-        <section className={`${styles.container} ${styles.heroSection}`}>
-        <motion.h1
-          className={styles.heroTitle}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Transformamos ideias em <br/><span className={styles.heroTitleAccent}>Sistemas de Alta Conversão</span>.
-        </motion.h1>
-
-        <motion.p
-          className={styles.heroLead}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Velocidade e escala para o seu negócio. Construímos MVPs, SaaS e Landing Pages premium para quem quer validar rápido e gerar caixa de verdade.
-        </motion.p>
-
+    <motion.article
+      className={className}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: idx * 0.1 }}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        perspective: 1000,
+      }}
+    >
+      <div className={styles.projectCardInner} style={{ transform: "translateZ(40px)" }}>
+        {/* Efeito de brilho que segue o mouse */}
         <motion.div
-          className={styles.heroActions}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <a href="#contato" className={styles.primaryButton}>
-            Solicitar Orçamento
-            <ArrowIcon />
-          </a>
-          <a href="#projetos" className={styles.secondaryButton}>
-            Ver Cases de Sucesso
-          </a>
-        </motion.div>
-      </section>
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10,
+            pointerEvents: "none",
+            background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+            x: useTransform(x, [-0.5, 0.5], ["-50%", "50%"]),
+            y: useTransform(y, [-0.5, 0.5], ["-50%", "50%"]),
+            opacity: useTransform(mouseXSpring, [-0.5, 0, 0.5], [1, 0, 1]),
+          }}
+        />
+        {children}
+      </div>
+    </motion.article>
+  );
+}
 
-        <div className={styles.marqueeContainer}>
-          <motion.div
-            className={styles.marqueeTrack}
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 20, ease: "linear", repeat: Infinity }}
-          >
-            {[...techMarquee, ...techMarquee].map((tech, i) => (
-              <span key={i} className={styles.marqueeItem}>
-                <span style={{ color: "var(--accent-cyan)", fontSize: "1.5rem" }}>•</span> {tech}
-              </span>
-            ))}
-          </motion.div>
+function SpotlightCard({ children, className, idx = 0 }: { children: React.ReactNode; className?: string; idx?: number }) {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(-1000);
+    mouseY.set(-1000);
+  };
+
+  return (
+    <motion.article
+      className={className}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: idx * 0.1 }}
+    >
+      <div className={styles.projectCardInner} style={{ position: "relative" }}>
+        <motion.div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1,
+            pointerEvents: "none",
+            background: useMotionTemplate`radial-gradient(500px circle at ${mouseX}px ${mouseY}px, rgba(139, 92, 246, 0.15), transparent 80%)`,
+          }}
+        />
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "100%" }}>
+          {children}
         </div>
       </div>
+    </motion.article>
+  );
+}
 
-      {/* Value Proposition (Bento Grid) */}
+function MagneticWrapper({ children }: { children: React.ReactNode }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left - rect.width / 2;
+    const mouseY = e.clientY - rect.top - rect.height / 2;
+    x.set(mouseX * 0.15); // Multiplicador bem menor para não ficar exagerado
+    y.set(mouseY * 0.15);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  const springX = useSpring(x, { stiffness: 250, damping: 20, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 250, damping: 20, mass: 0.1 });
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: springX, y: springY, display: "inline-block" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+const SECTIONS = [
+  { id: "inicio", label: "Início" },
+  { id: "projetos", label: "Projetos" },
+  { id: "experiencias", label: "Experiência" },
+  { id: "contato", label: "Contato" },
+];
+
+function FloatingSummary() {
+  const { scrollYProgress } = useScroll();
+  const [activeSection, setActiveSection] = useState("inicio");
+
+  useEffect(() => {
+    const observers = SECTIONS.map(({ id }) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { rootMargin: "-30% 0px -70% 0px" }
+      );
+      observer.observe(el);
+      return { el, observer };
+    });
+    return () => observers.forEach(obs => obs?.observer.unobserve(obs.el));
+  }, []);
+
+  return (
+    <motion.div
+      className={styles.floatingSummary}
+      initial={{ opacity: 0, filter: "blur(10px)" }}
+      animate={{ opacity: 0.25, filter: "blur(0px)" }}
+      whileHover={{ opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Linha guia e orbe que acompanha o scroll fisicamente */}
+      <div className={styles.summaryTrackContainer}>
+        {/* O rastro de luz que preenche a linha */}
+        <motion.div
+          className={styles.summaryTrackFill}
+          style={{
+            scaleY: scrollYProgress,
+            originY: 0,
+          }}
+        />
+        {/* A ponta brilhante (orbe) */}
+        <motion.div
+          className={styles.summaryActiveOrbScroll}
+          style={{
+            top: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]),
+          }}
+        />
+      </div>
+
+      {SECTIONS.map((section, index) => {
+        const activeIndex = SECTIONS.findIndex(s => s.id === activeSection);
+        const isActive = activeSection === section.id;
+        const isPassed = index <= activeIndex;
+        return (
+          <a
+            key={section.id}
+            href={`#${section.id}`}
+            className={styles.summaryItem}
+            data-active={isActive}
+            data-passed={isPassed}
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            <div className={styles.summaryOrbContainer}>
+              <div className={styles.summaryOrb} />
+            </div>
+            <span className={styles.summaryLabel} data-active={isActive} data-passed={isPassed}>{section.label}</span>
+          </a>
+        );
+      })}
+    </motion.div>
+  );
+}
+
+export function HomePage() {
+  const { scrollYProgress } = useScroll();
+
+  const yParallax1 = useTransform(scrollYProgress, [0, 1], [0, -400]);
+  const yParallax2 = useTransform(scrollYProgress, [0, 1], [0, 400]);
+
+  return (
+    <main className={styles.pageShell}>
+      {/* Background animado de paralax */}
+      <motion.div className={styles.parallaxGlow} style={{ y: yParallax1, top: "20%", left: "-10%", background: "radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(2,4,10,0) 70%)" }} />
+      <motion.div className={styles.parallaxGlow} style={{ y: yParallax2, top: "60%", right: "-10%", background: "radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(2,4,10,0) 70%)" }} />
+      <FloatingSummary />
+
+      <div className={styles.glowTop} />
+
+      {/* Hero — ocupa 100dvh, sem cortes */}
+      <section id="inicio" className={styles.heroWrapper} style={{ position: "relative" }}>
+        {/* Auroras Animadas no Fundo do Hero */}
+        <motion.div
+          className={styles.heroAurora1}
+          animate={{ x: [0, 300, -100, 0], y: [0, -150, 100, 0], scale: [1, 1.4, 1] }}
+          transition={{ duration: 12, ease: "easeInOut", repeat: Infinity }}
+        />
+        <motion.div
+          className={styles.heroAurora2}
+          animate={{ x: [0, -300, 150, 0], y: [0, 200, -100, 0], scale: [1, 1.3, 1] }}
+          transition={{ duration: 15, ease: "easeInOut", repeat: Infinity, delay: 1 }}
+        />
+
+        <motion.div
+          className={styles.heroInner}
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.h1 className={styles.heroTitle} variants={fadeUp}>
+            Transformamos ideias em{" "}
+            <span className={styles.heroTitleAccent}>Sistemas de Alta Conversão</span>.
+          </motion.h1>
+
+          <motion.p className={styles.heroLead} variants={fadeUp}>
+            Velocidade e escala para o seu negócio. Construímos MVPs, SaaS e Landing Pages premium para quem quer validar rápido e gerar caixa de verdade.
+          </motion.p>
+
+          <motion.div className={styles.heroActions} variants={fadeUp}>
+            <MagneticWrapper>
+              <a href="#contato" className={styles.primaryButton}>
+                Solicitar Orçamento
+                <ArrowIcon />
+              </a>
+            </MagneticWrapper>
+            <MagneticWrapper>
+              <a href="#projetos" className={styles.secondaryButton}>
+                Ver Cases de Sucesso
+              </a>
+            </MagneticWrapper>
+          </motion.div>
+        </motion.div>
+
+      </section>
+
+      {/* Marquee (faixa rotativa) fora do Hero para a torção não ser cortada */}
+      <div className={styles.marqueeContainer}>
+        <motion.div
+          className={styles.marqueeTrack}
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+        >
+          {techMarquee.map((tech, i) => (
+            <span key={i} className={styles.marqueeItem}>
+              <span style={{ color: "var(--accent-cyan)", fontSize: "1.25rem" }}>•</span> {tech}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Bento Grid — Diferenciais */}
       <section className={styles.sectionBlock}>
         <div className={styles.container}>
-          <div className={styles.sectionHeader}>
+          <motion.div
+            className={styles.sectionHeader}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
             <p className={styles.sectionKicker}>O Nosso Diferencial</p>
             <h2 className={styles.sectionTitle}>Construído para Performance.</h2>
             <p className={styles.sectionLead}>
               Nós não apenas escrevemos código. Nós criamos produtos digitais otimizados para converter visitantes em clientes.
             </p>
-          </div>
+          </motion.div>
 
           <div className={styles.bentoGrid}>
             {bentoFeatures.map((feature, idx) => (
@@ -151,8 +402,8 @@ export function HomePage() {
                 className={`${styles.bentoCard} ${feature.large ? styles.bentoLarge : ""}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
               >
                 <div className={styles.bentoGlow} />
                 <div className={styles.bentoIcon}>{feature.icon}</div>
@@ -164,41 +415,34 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Projects Section */}
+      {/* Projetos */}
       <section id="projetos" className={styles.sectionBlock}>
         <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.sectionKicker}>Projetos de Sucesso</p>
-            <h2 className={styles.sectionTitle}>Produtos que Entregamos</h2>
+          <motion.div
+            className={styles.sectionHeader}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className={styles.sectionKicker}>Portfólio</p>
+            <h2 className={styles.sectionTitle}>Meus Trabalhos & Templates</h2>
             <p className={styles.sectionLead}>
-              Conheça alguns dos sistemas, MVPs e e-commerces que ajudamos a construir e escalar.
+              Confira alguns dos projetos, sistemas e landing pages que desenvolvi.
             </p>
-          </div>
+          </motion.div>
 
           <div className={styles.projectsGrid}>
             {projectsData.filter(p => p.type === "project").map((project, idx) => (
-              <motion.article
-                key={project.id}
-                className={styles.projectCard}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-              >
-                <div 
-                  className={styles.projectImageWrapper}
-                  style={{ padding: project.id === 'tastly' ? '3rem' : '2rem' }}
-                >
+              <TiltCard key={project.id} className={styles.projectCard} idx={idx}>
+                <div className={styles.projectImageWrapper} style={{ padding: '2rem' }}>
                   <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <Image
                       src={project.image}
                       alt={project.title}
                       fill
                       className={styles.projectImage}
-                      style={{ 
-                        objectFit: project.id === 'tastly' ? 'contain' : 'cover',
-                        borderRadius: '8px'
-                      }}
+                      style={{ objectFit: project.id === 'tastly' ? 'contain' : 'cover', borderRadius: '8px' }}
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       unoptimized
                     />
@@ -212,9 +456,8 @@ export function HomePage() {
                   </div>
                   <h3 className={styles.projectTitle}>{project.title}</h3>
                   <p className={styles.projectDesc}>{project.description}</p>
-                  
                   {project.url ? (
-                    <a href={project.url} target="_blank" rel="noreferrer" className={styles.projectAction} style={{ textDecoration: 'none' }}>
+                    <a href={project.url} target="_blank" rel="noreferrer" className={styles.projectAction}>
                       Acessar Projeto <ArrowIcon />
                     </a>
                   ) : (
@@ -223,47 +466,40 @@ export function HomePage() {
                     </div>
                   )}
                 </div>
-              </motion.article>
+              </TiltCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Experiências Section */}
+      {/* Experiências */}
       <section id="experiencias" className={styles.sectionBlock}>
         <div className={styles.container}>
-          <div className={styles.sectionHeader}>
+          <motion.div
+            className={styles.sectionHeader}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
             <p className={styles.sectionKicker}>Trajetória</p>
             <h2 className={styles.sectionTitle}>Experiência Profissional</h2>
             <p className={styles.sectionLead}>
               Empresas incríveis por onde passei construindo tecnologia de ponta.
             </p>
-          </div>
+          </motion.div>
 
           <div className={styles.projectsGrid}>
             {projectsData.filter(p => p.type === "experience").map((project, idx) => (
-              <motion.article
-                key={project.id}
-                className={styles.projectCard}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-              >
-                <div 
-                  className={styles.projectImageWrapper}
-                  style={{ background: '#ffffff', padding: '3rem' }}
-                >
+              <SpotlightCard key={project.id} className={styles.projectCard} idx={idx}>
+                <div className={styles.projectImageWrapper} style={{ background: '#fff', padding: '3rem' }}>
                   <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <Image
                       src={project.image}
                       alt={project.title}
                       fill
                       className={styles.projectImage}
-                      style={{ 
-                        objectFit: 'contain',
-                        borderRadius: '0'
-                      }}
+                      style={{ objectFit: 'contain' }}
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       unoptimized
                     />
@@ -276,11 +512,14 @@ export function HomePage() {
                       <span key={tech} className={styles.projectTag}>{tech}</span>
                     ))}
                   </div>
-                  <h3 className={styles.projectTitle}>{project.title}</h3>
+                  <h3 className={styles.projectTitle}>
+                    {project.title}
+                    {project.period && <span className={styles.projectPeriod}>{project.period}</span>}
+                  </h3>
+                  {project.role && <div className={styles.projectRole}>{project.role}</div>}
                   <p className={styles.projectDesc}>{project.description}</p>
-                  
                   {project.url ? (
-                    <a href={project.url} target="_blank" rel="noreferrer" className={styles.projectAction} style={{ textDecoration: 'none' }}>
+                    <a href={project.url} target="_blank" rel="noreferrer" className={styles.projectAction}>
                       Acessar Empresa <ArrowIcon />
                     </a>
                   ) : (
@@ -289,17 +528,17 @@ export function HomePage() {
                     </div>
                   )}
                 </div>
-              </motion.article>
+              </SpotlightCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <section id="contato" className={styles.ctaSection}>
         <div className={styles.ctaGlow} />
         <div className={styles.ctaContent}>
-          <motion.h2 
+          <motion.h2
             className={styles.ctaTitle}
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -308,7 +547,7 @@ export function HomePage() {
           >
             Vamos construir o seu próximo produto de sucesso?
           </motion.h2>
-          <motion.p 
+          <motion.p
             className={styles.ctaDesc}
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -317,10 +556,10 @@ export function HomePage() {
           >
             Agende uma consultoria gratuita conosco e descubra como podemos transformar sua ideia em um SaaS ou Landing Page de altíssima conversão.
           </motion.p>
-          <motion.a 
-            href="https://wa.me/5514988004041" 
-            target="_blank" 
-            rel="noreferrer" 
+          <motion.a
+            href="https://wa.me/5514988004041"
+            target="_blank"
+            rel="noreferrer"
             className={styles.primaryButton}
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -335,25 +574,37 @@ export function HomePage() {
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <div className={styles.socialRow}>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className={styles.socialBtn} aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-          </a>
-          <a href="https://linkedin.com/in/brenoserenmartins" target="_blank" rel="noreferrer" className={styles.socialBtn} aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </a>
-          <a href="mailto:contato@brenosm.dev" className={styles.socialBtn} aria-label="E-mail">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-              <path d="M22 6l-10 7L2 6" />
-            </svg>
-          </a>
+        <div className={styles.footerTop}>
+          <div className={styles.footerBrand}>
+            <span className={styles.footerLogo}>
+              <span className={styles.navBrandAccent}>BSM</span> Studio
+            </span>
+            <p className={styles.footerTagline}>Transformando ideias em sistemas de alta conversão.</p>
+          </div>
+          <div className={styles.footerLinks}>
+            <div className={styles.footerCol}>
+              <h4 className={styles.footerColTitle}>Navegação</h4>
+              <a href="#projetos" className={styles.footerLink}>Projetos</a>
+              <a href="#experiencias" className={styles.footerLink}>Experiência</a>
+              <a href="#contato" className={styles.footerLink}>Contato</a>
+            </div>
+            <div className={styles.footerCol}>
+              <h4 className={styles.footerColTitle}>Produtos</h4>
+              <a href="https://howmuchlove.com.br" target="_blank" rel="noreferrer" className={styles.footerLink}>HowMuchLove</a>
+              <a href="https://tastly.com.br" target="_blank" rel="noreferrer" className={styles.footerLink}>Tastly</a>
+            </div>
+            <div className={styles.footerCol}>
+              <h4 className={styles.footerColTitle}>Social</h4>
+              <a href="https://github.com/BrenoSerenMartins" target="_blank" rel="noreferrer" className={styles.footerLink}>GitHub</a>
+              <a href="https://linkedin.com/in/brenoserenmartins" target="_blank" rel="noreferrer" className={styles.footerLink}>LinkedIn</a>
+              <a href="mailto:contato@brenosm.dev" className={styles.footerLink}>E-mail</a>
+              <a href="https://wa.me/5514988004041" target="_blank" rel="noreferrer" className={styles.footerLink}>WhatsApp</a>
+            </div>
+          </div>
         </div>
-        <p>© 2024 Breno Seren. Todos os direitos reservados. Foco em conversão e performance.</p>
+        <div className={styles.footerBottom}>
+          <p>© 2026 BSM Studio · uma empresa <strong>BSM Group</strong>. Todos os direitos reservados.</p>
+        </div>
       </footer>
     </main>
   );

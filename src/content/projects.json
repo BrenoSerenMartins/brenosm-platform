@@ -18,21 +18,25 @@
     "type": "project"
   },
   {
-    "id": "moving-pay",
-    "title": "MovingPay",
-    "description": "Soluções completas para Adquirentes, Subadquirentes e Marketplaces. Atuação em módulos de conciliação de recebíveis, gateway de pagamentos e obrigações regulatórias.",
-    "image": "/projects/movingpay-logo.png",
-    "url": "https://movingpay.com.br",
-    "technologies": ["Node.js", "React", "Next.js", "MySQL", "PostgreSQL", "AWS"],
-    "type": "experience"
-  },
-  {
     "id": "bizcommerce",
     "title": "Bizcommerce",
+    "role": "Desenvolvedor Fullstack",
+    "period": "Nov/2020 — Nov/2025",
     "description": "Potencializando e-commerces com evolução contínua. Desenvolvimento e sustentação de lojas virtuais personalizadas, infraestrutura escalável e integrações profundas.",
     "image": "/projects/bizcommerce-logo.svg",
     "url": "https://www.bizcommerce.com.br",
     "technologies": ["PHP", "Magento 1 & 2", "Redis", "Elasticsearch", "MySQL"],
+    "type": "experience"
+  },
+  {
+    "id": "moving-pay",
+    "title": "MovingPay",
+    "role": "Desenvolvedor Fullstack",
+    "period": "Mar/2026 — Presente",
+    "description": "Soluções completas para Adquirentes, Subadquirentes e Marketplaces. Atuação em módulos de conciliação de recebíveis, gateway de pagamentos e obrigações regulatórias.",
+    "image": "/projects/movingpay-logo.png",
+    "url": "https://movingpay.com.br",
+    "technologies": ["Node.js", "React", "Next.js", "MySQL", "PostgreSQL", "AWS"],
     "type": "experience"
   }
 ]
