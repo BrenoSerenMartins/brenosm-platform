@@ -518,7 +518,7 @@ export function HomePage() {
           </div>
         </div>
         <div className={styles.footerBottom}>
-          <p>© 2026 BSM Studio · uma empresa <strong>BSM Group</strong>. Todos os direitos reservados.</p>
+          <p>© 2026 BSM Studio</p>
         </div>
       </footer>
     </main>

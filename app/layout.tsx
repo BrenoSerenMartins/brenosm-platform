@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/src/config/site";
+import { DevToolsGuard } from "@/src/components/site/devtools-guard";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -37,7 +38,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <DevToolsGuard />
+        {children}
+      </body>
     </html>
   );
 }
