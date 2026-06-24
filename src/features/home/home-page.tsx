@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion, useScroll, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import { useEffect, useRef } from "react";
 import styles from "@/src/features/home/portfolio-page.module.css";
 import projectsData from "@/src/content/projects.json";
 
@@ -76,6 +77,9 @@ const fadeUp = {
 function TiltCard({ children, className, idx = 0 }: { children: React.ReactNode; className?: string; idx?: number }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const hoverEnabledRef = useRef(false);
+  const frameRef = useRef<number | null>(null);
+  const pendingPointRef = useRef({ x: 0.5, y: 0.5 });
 
   const mouseXSpring = useSpring(x, { stiffness: 300, damping: 40 });
   const mouseYSpring = useSpring(y, { stiffness: 300, damping: 40 });
@@ -83,18 +87,52 @@ function TiltCard({ children, className, idx = 0 }: { children: React.ReactNode;
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
 
-  // Calculate mouse position for the glare effect
-  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"]);
-  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"]);
+  useEffect(() => {
+    const media = window.matchMedia("(pointer: fine)");
+    hoverEnabledRef.current = media.matches;
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      hoverEnabledRef.current = event.matches;
+    };
+
+    media.addEventListener("change", handleChange);
+
+    return () => {
+      hoverEnabledRef.current = false;
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+      media.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+  const schedulePoint = (nextX: number, nextY: number) => {
+    pendingPointRef.current.x = nextX;
+    pendingPointRef.current.y = nextY;
+
+    if (frameRef.current !== null) {
+      return;
+    }
+
+    frameRef.current = window.requestAnimationFrame(() => {
+      x.set(pendingPointRef.current.x);
+      y.set(pendingPointRef.current.y);
+      frameRef.current = null;
+    });
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!hoverEnabledRef.current) {
+      return;
+    }
+
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
+    schedulePoint(mouseX / width - 0.5, mouseY / height - 0.5);
   };
 
   const handleMouseLeave = () => {
@@ -116,6 +154,7 @@ function TiltCard({ children, className, idx = 0 }: { children: React.ReactNode;
         rotateY,
         transformStyle: "preserve-3d",
         perspective: 1000,
+        willChange: "transform, opacity",
       }}
     >
       <div className={styles.projectCardInner} style={{ transform: "translateZ(40px)" }}>
@@ -165,6 +204,7 @@ function SpotlightCard({ children, className, idx = 0 }: { children: React.React
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, delay: idx * 0.1 }}
+      style={{ willChange: "transform, opacity" }}
     >
       <div className={styles.projectCardInner} style={{ position: "relative" }}>
         <motion.div
@@ -190,13 +230,54 @@ function SpotlightCard({ children, className, idx = 0 }: { children: React.React
 function MagneticWrapper({ children }: { children: React.ReactNode }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const hoverEnabledRef = useRef(false);
+  const frameRef = useRef<number | null>(null);
+  const pendingPointRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const media = window.matchMedia("(pointer: fine)");
+    hoverEnabledRef.current = media.matches;
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      hoverEnabledRef.current = event.matches;
+    };
+
+    media.addEventListener("change", handleChange);
+
+    return () => {
+      hoverEnabledRef.current = false;
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+      media.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+  const schedulePoint = (nextX: number, nextY: number) => {
+    pendingPointRef.current.x = nextX;
+    pendingPointRef.current.y = nextY;
+
+    if (frameRef.current !== null) {
+      return;
+    }
+
+    frameRef.current = window.requestAnimationFrame(() => {
+      x.set(pendingPointRef.current.x);
+      y.set(pendingPointRef.current.y);
+      frameRef.current = null;
+    });
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!hoverEnabledRef.current) {
+      return;
+    }
+
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - rect.left - rect.width / 2;
     const mouseY = e.clientY - rect.top - rect.height / 2;
-    x.set(mouseX * 0.15); // Multiplicador bem menor para não ficar exagerado
-    y.set(mouseY * 0.15);
+    schedulePoint(mouseX * 0.15, mouseY * 0.15);
   };
 
   const handleMouseLeave = () => {
@@ -211,7 +292,7 @@ function MagneticWrapper({ children }: { children: React.ReactNode }) {
     <motion.div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ x: springX, y: springY, display: "inline-block" }}
+      style={{ x: springX, y: springY, display: "inline-block", willChange: "transform" }}
     >
       {children}
     </motion.div>
@@ -227,8 +308,26 @@ export function HomePage() {
   return (
     <main className={styles.pageShell}>
       {/* Background animado de paralax */}
-      <motion.div className={styles.parallaxGlow} style={{ y: yParallax1, top: "20%", left: "-10%", background: "radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(2,4,10,0) 70%)" }} />
-      <motion.div className={styles.parallaxGlow} style={{ y: yParallax2, top: "60%", right: "-10%", background: "radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(2,4,10,0) 70%)" }} />
+      <motion.div
+        className={styles.parallaxGlow}
+        style={{
+          y: yParallax1,
+          top: "20%",
+          left: "-10%",
+          background: "radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(2,4,10,0) 70%)",
+          willChange: "transform, opacity",
+        }}
+      />
+      <motion.div
+        className={styles.parallaxGlow}
+        style={{
+          y: yParallax2,
+          top: "60%",
+          right: "-10%",
+          background: "radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(2,4,10,0) 70%)",
+          willChange: "transform, opacity",
+        }}
+      />
 
       <div className={styles.glowTop} />
 
@@ -237,11 +336,13 @@ export function HomePage() {
         {/* Auroras Animadas no Fundo do Hero */}
         <motion.div
           className={styles.heroAurora1}
+          style={{ willChange: "transform, opacity" }}
           animate={{ x: [0, 300, -100, 0], y: [0, -150, 100, 0], scale: [1, 1.4, 1] }}
           transition={{ duration: 12, ease: "easeInOut", repeat: Infinity }}
         />
         <motion.div
           className={styles.heroAurora2}
+          style={{ willChange: "transform, opacity" }}
           animate={{ x: [0, -300, 150, 0], y: [0, 200, -100, 0], scale: [1, 1.3, 1] }}
           transition={{ duration: 15, ease: "easeInOut", repeat: Infinity, delay: 1 }}
         />
@@ -282,6 +383,7 @@ export function HomePage() {
       <div className={styles.marqueeContainer}>
         <motion.div
           className={styles.marqueeTrack}
+          style={{ willChange: "transform" }}
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 20, ease: "linear", repeat: Infinity }}
         >

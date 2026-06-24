@@ -40,8 +40,8 @@ export function PremiumCursor() {
 
   return (
     <>
-      <motion.div className={styles.cursorOuter} style={{ left: outerX, top: outerY }} />
-      <motion.div className={styles.cursorInner} style={{ left: coreX, top: coreY }} />
+      <motion.div className={styles.cursorOuter} style={{ left: outerX, top: outerY, willChange: "transform" }} />
+      <motion.div className={styles.cursorInner} style={{ left: coreX, top: coreY, willChange: "transform" }} />
     </>
   );
 }

@@ -292,6 +292,8 @@ export function HeroScene() {
   const prefersReducedMotion = useReducedMotion();
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
+  const frameRef = useRef<number | null>(null);
+  const pendingPointRef = useRef({ x: 0.5, y: 0.5 });
 
   const smoothX = useSpring(pointerX, { stiffness: 85, damping: 22, mass: 0.45 });
   const smoothY = useSpring(pointerY, { stiffness: 85, damping: 22, mass: 0.45 });
@@ -311,13 +313,32 @@ export function HeroScene() {
       return;
     }
 
+    const media = window.matchMedia("(pointer: fine)");
+    if (!media.matches) {
+      return;
+    }
+
+    const commitPoint = (x: number, y: number) => {
+      pendingPointRef.current.x = x;
+      pendingPointRef.current.y = y;
+
+      if (frameRef.current !== null) {
+        return;
+      }
+
+      frameRef.current = window.requestAnimationFrame(() => {
+        pointerX.set(pendingPointRef.current.x);
+        pointerY.set(pendingPointRef.current.y);
+        frameRef.current = null;
+      });
+    };
+
     const handleMove = (event: PointerEvent) => {
       const rect = element.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width;
       const y = (event.clientY - rect.top) / rect.height;
 
-      pointerX.set(Math.min(Math.max(x, 0), 1));
-      pointerY.set(Math.min(Math.max(y, 0), 1));
+      commitPoint(Math.min(Math.max(x, 0), 1), Math.min(Math.max(y, 0), 1));
     };
 
     const handleLeave = () => {
@@ -329,6 +350,10 @@ export function HeroScene() {
     element.addEventListener("pointerleave", handleLeave);
 
     return () => {
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
       element.removeEventListener("pointermove", handleMove);
       element.removeEventListener("pointerleave", handleLeave);
     };
@@ -336,7 +361,7 @@ export function HeroScene() {
 
   return (
     <div ref={containerRef} className={styles.heroSceneFrame}>
-      <motion.div className={styles.heroSceneBackdrop} style={{ x: glowX, y: glowY }} />
+      <motion.div className={styles.heroSceneBackdrop} style={{ x: glowX, y: glowY, willChange: "transform, opacity" }} />
       <div className={styles.heroSceneGrid} />
 
       <motion.div
@@ -348,6 +373,7 @@ export function HeroScene() {
                 transformStyle: "preserve-3d",
                 rotateX,
                 rotateY,
+                willChange: "transform",
               }
         }
       >

@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import type { HTMLMotionProps } from "framer-motion";
-import type { PropsWithChildren } from "react";
+import { useEffect, useRef, type PropsWithChildren } from "react";
 import styles from "@/src/features/home/portfolio-page.module.css";
 
 type TiltCardProps = PropsWithChildren<
@@ -22,6 +22,9 @@ export function TiltCard({ children, className, tone = "cyan", ...props }: TiltC
   const prefersReducedMotion = useReducedMotion();
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
+  const hoverEnabledRef = useRef(false);
+  const frameRef = useRef<number | null>(null);
+  const pendingPointRef = useRef({ x: 0.5, y: 0.5 });
 
   const smoothX = useSpring(pointerX, { stiffness: 220, damping: 26, mass: 0.25 });
   const smoothY = useSpring(pointerY, { stiffness: 220, damping: 26, mass: 0.25 });
@@ -29,21 +32,59 @@ export function TiltCard({ children, className, tone = "cyan", ...props }: TiltC
   const rotateX = useTransform(smoothY, [0, 1], [10, -10]);
   const rotateY = useTransform(smoothX, [0, 1], [-12, 12]);
 
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const media = window.matchMedia("(pointer: fine)");
+    hoverEnabledRef.current = media.matches;
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      hoverEnabledRef.current = event.matches;
+    };
+
+    media.addEventListener("change", handleChange);
+
+    return () => {
+      hoverEnabledRef.current = false;
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+      media.removeEventListener("change", handleChange);
+    };
+  }, [prefersReducedMotion]);
+
+  const schedulePoint = (nextX: number, nextY: number) => {
+    pendingPointRef.current.x = nextX;
+    pendingPointRef.current.y = nextY;
+
+    if (frameRef.current !== null) {
+      return;
+    }
+
+    frameRef.current = window.requestAnimationFrame(() => {
+      pointerX.set(pendingPointRef.current.x);
+      pointerY.set(pendingPointRef.current.y);
+      frameRef.current = null;
+    });
+  };
+
   return (
     <motion.article
       {...props}
       className={`${styles.tiltCard} ${toneClassMap[tone]} ${className ?? ""}`}
       data-tone={tone}
-      style={prefersReducedMotion ? undefined : { rotateX, rotateY }}
+      style={prefersReducedMotion ? undefined : { rotateX, rotateY, willChange: "transform, opacity" }}
       whileHover={prefersReducedMotion ? undefined : { y: -6, scale: 1.01 }}
       onPointerMove={(event) => {
-        if (prefersReducedMotion) {
+        if (prefersReducedMotion || !hoverEnabledRef.current) {
           return;
         }
 
         const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-        pointerX.set((event.clientX - rect.left) / rect.width);
-        pointerY.set((event.clientY - rect.top) / rect.height);
+        schedulePoint((event.clientX - rect.left) / rect.width, (event.clientY - rect.top) / rect.height);
       }}
       onPointerLeave={() => {
         pointerX.set(0.5);

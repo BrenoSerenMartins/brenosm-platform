@@ -16,6 +16,7 @@ export function AchievementMarquee({ items }: AchievementMarqueeProps) {
     <div className={styles.testimonialMarquee}>
       <motion.div
         className={styles.testimonialTrack}
+        style={{ willChange: "transform" }}
         animate={prefersReducedMotion ? undefined : { x: ["0%", "-50%"] }}
         transition={
           prefersReducedMotion

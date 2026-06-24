@@ -152,6 +152,7 @@
   z-index: 0;
   pointer-events: none;
   opacity: 0.05;
+  will-change: transform, opacity;
 }
 
 .heroAurora1 {
@@ -288,6 +289,7 @@
   width: max-content;
   align-items: center;
   white-space: nowrap;
+  will-change: transform;
 }
 
 .marqueeItem {
@@ -311,6 +313,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
 }
 
 .container {
@@ -441,6 +445,7 @@
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  will-change: transform, opacity;
 }
 
 .projectCardInner {
@@ -452,6 +457,7 @@
   flex-direction: column;
   height: 100%;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .projectCard:hover .projectCardInner {
@@ -467,6 +473,7 @@
   filter: blur(100px);
   z-index: 0;
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .projectImageWrapper {
@@ -480,6 +487,7 @@
 .projectImage {
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .projectCard:hover .projectImage {
@@ -571,6 +579,8 @@
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: 680px;
 }
 
 .ctaGlow {
@@ -610,6 +620,8 @@
   border-top: 1px solid var(--glass-border);
   padding: 0 clamp(1rem, 4vw, 1.5rem);
   color: var(--text-muted);
+  content-visibility: auto;
+  contain-intrinsic-size: 560px;
 }
 
 .footerTop {
