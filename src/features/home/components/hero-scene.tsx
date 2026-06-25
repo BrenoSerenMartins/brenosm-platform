@@ -4,6 +4,7 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 import styles from "@/src/features/home/portfolio-page.module.css";
+import { useSupportsHover } from "@/src/lib/use-supports-hover";
 
 type PanelTone = "cyan" | "violet" | "indigo" | "gold";
 type PanelIcon = "magento" | "laravel" | "api" | "erp" | "react" | "database" | "docker" | "saas";
@@ -290,6 +291,7 @@ function AvatarIllustration() {
 export function HeroScene() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const supportsHover = useSupportsHover();
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
   const frameRef = useRef<number | null>(null);
@@ -371,8 +373,8 @@ export function HeroScene() {
             ? undefined
             : {
                 transformStyle: "preserve-3d",
-                rotateX,
-                rotateY,
+                rotateX: supportsHover ? rotateX : 5,
+                rotateY: supportsHover ? rotateY : -7,
                 willChange: "transform",
               }
         }
@@ -458,7 +460,7 @@ export function HeroScene() {
                 key={panel.title}
                 className={`${styles.heroScenePanel} ${toneClassMap[panel.tone]}`}
                 style={panelStyle(panel)}
-                whileHover={prefersReducedMotion ? undefined : { y: -5, scale: 1.01 }}
+                whileHover={prefersReducedMotion || !supportsHover ? undefined : { y: -5, scale: 1.01 }}
                 animate={
                   prefersReducedMotion
                     ? undefined

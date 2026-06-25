@@ -6,6 +6,7 @@ import { TiltCard } from "@/src/features/home/components/tilt-card";
 import { getProjectPreviewSrc } from "@/src/content/portfolio";
 import type { ProjectCard } from "@/src/types/portfolio";
 import styles from "@/src/features/home/portfolio-page.module.css";
+import { useSupportsHover } from "@/src/lib/use-supports-hover";
 
 type Tone = "cyan" | "violet" | "indigo" | "gold";
 type ShowcaseVariant = "hero-primary" | "hero-secondary" | "case";
@@ -55,6 +56,7 @@ function resolvePrimaryAction(project: ProjectCard) {
 }
 
 export function ProjectShowcase({ project, tone = "cyan", variant = "case", className }: ProjectShowcaseProps) {
+  const supportsHover = useSupportsHover();
   const preview = getProjectPreviewSrc(project);
   const hostLabel = getHostLabel(project);
   const priorityLabel = getPriorityLabel(project.heroPriority);
@@ -162,7 +164,7 @@ export function ProjectShowcase({ project, tone = "cyan", variant = "case", clas
           <motion.a
             href={primaryAction.href}
             className={styles.projectShowcasePrimaryAction}
-            whileHover={{ y: -2, scale: 1.01 }}
+            whileHover={supportsHover ? { y: -2, scale: 1.01 } : undefined}
             whileTap={{ scale: 0.98 }}
             target={primaryAction.external ? "_blank" : undefined}
             rel={primaryAction.external ? "noreferrer" : undefined}

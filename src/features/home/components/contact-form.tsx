@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
 import { siteConfig } from "@/src/config/site";
 import styles from "@/src/features/home/portfolio-page.module.css";
+import { useSupportsHover } from "@/src/lib/use-supports-hover";
 
 type ContactValues = {
   name: string;
@@ -45,6 +46,7 @@ function validate(values: ContactValues) {
 }
 
 export function ContactForm() {
+  const supportsHover = useSupportsHover();
   const [values, setValues] = useState<ContactValues>(initialValues);
   const [errors, setErrors] = useState<ContactErrors>({});
   const [submitted, setSubmitted] = useState(false);
@@ -155,7 +157,7 @@ export function ContactForm() {
           <motion.button
             type="submit"
             className={styles.primaryButton}
-            whileHover={canSend ? { scale: 1.03 } : undefined}
+            whileHover={canSend && supportsHover ? { scale: 1.03 } : undefined}
             whileTap={canSend ? { scale: 0.98 } : undefined}
             disabled={!canSend || isSending}
           >

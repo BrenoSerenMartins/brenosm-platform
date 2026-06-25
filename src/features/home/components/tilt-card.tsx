@@ -4,6 +4,7 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import type { HTMLMotionProps } from "framer-motion";
 import { useEffect, useRef, type PropsWithChildren } from "react";
 import styles from "@/src/features/home/portfolio-page.module.css";
+import { useSupportsHover } from "@/src/lib/use-supports-hover";
 
 type TiltCardProps = PropsWithChildren<
   HTMLMotionProps<"article"> & {
@@ -20,6 +21,7 @@ const toneClassMap = {
 
 export function TiltCard({ children, className, tone = "cyan", ...props }: TiltCardProps) {
   const prefersReducedMotion = useReducedMotion();
+  const supportsHover = useSupportsHover();
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
   const hoverEnabledRef = useRef(false);
@@ -31,6 +33,12 @@ export function TiltCard({ children, className, tone = "cyan", ...props }: TiltC
 
   const rotateX = useTransform(smoothY, [0, 1], [10, -10]);
   const rotateY = useTransform(smoothX, [0, 1], [-12, 12]);
+  const mobileRotateY = {
+    cyan: -8,
+    violet: 8,
+    indigo: -6,
+    gold: 6,
+  }[tone];
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -76,10 +84,16 @@ export function TiltCard({ children, className, tone = "cyan", ...props }: TiltC
       {...props}
       className={`${styles.tiltCard} ${toneClassMap[tone]} ${className ?? ""}`}
       data-tone={tone}
-      style={prefersReducedMotion ? undefined : { rotateX, rotateY, willChange: "transform, opacity" }}
-      whileHover={prefersReducedMotion ? undefined : { y: -6, scale: 1.01 }}
+      style={
+        prefersReducedMotion
+          ? undefined
+          : supportsHover
+            ? { rotateX, rotateY, willChange: "transform, opacity" }
+            : { rotateX: 5, rotateY: mobileRotateY, transformStyle: "preserve-3d", perspective: 1000, willChange: "transform, opacity" }
+      }
+      whileHover={prefersReducedMotion || !supportsHover ? undefined : { y: -6, scale: 1.01 }}
       onPointerMove={(event) => {
-        if (prefersReducedMotion || !hoverEnabledRef.current) {
+        if (prefersReducedMotion || !supportsHover || !hoverEnabledRef.current) {
           return;
         }
 

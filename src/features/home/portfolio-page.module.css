@@ -353,6 +353,34 @@
 }
 
 /* ===== Bento Grid ===== */
+.railShell {
+  position: relative;
+}
+
+.railArrow {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-muted);
+  opacity: 0.75;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.railArrow svg {
+  width: 14px;
+  height: 14px;
+}
+
 .bentoGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -407,6 +435,10 @@
   line-height: 1.6;
   position: relative;
   z-index: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .bentoLarge {
@@ -431,13 +463,136 @@
   opacity: 0.25;
 }
 
+.bentoActionRow {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.bentoMeta {
+  color: var(--text-muted);
+  font-size: clamp(0.675rem, 0.9vw, 0.75rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bentoAction {
+  appearance: none;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-weight: 600;
+  font-size: clamp(0.775rem, 1vw, 0.875rem);
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.bentoAction:hover {
+  transform: translateY(-1px);
+  border-color: var(--glass-border-strong);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.featureModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: rgba(1, 3, 8, 0.72);
+  backdrop-filter: blur(16px);
+}
+
+.featureModal {
+  position: relative;
+  width: min(100%, 34rem);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(12, 16, 28, 0.98), rgba(7, 10, 18, 0.98));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.featureModalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.featureModalIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 1rem;
+}
+
+.featureModalIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.featureModalTitle {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: 0.75rem;
+}
+
+.featureModalText {
+  color: var(--text-soft);
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.75;
+}
+
+.featureModalText + .featureModalText {
+  margin-top: 0.75rem;
+}
+
 /* ===== Project Cards ===== */
 .projectsGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1rem, 3vw, 2rem);
-  max-width: 1024px;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(18rem, 24rem);
+  gap: clamp(0.875rem, 2vw, 1.25rem);
+  max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.95rem clamp(1rem, 2vw, 1.5rem) 1.05rem;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: clamp(1rem, 2vw, 1.5rem);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.projectsGridProjects {
+  grid-auto-columns: minmax(17rem, 23rem);
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.projectsGrid::-webkit-scrollbar {
+  display: none;
 }
 
 .projectCard {
@@ -445,6 +600,8 @@
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
   will-change: transform, opacity;
 }
 
@@ -495,7 +652,7 @@
 }
 
 .projectContent {
-  padding: clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -504,7 +661,7 @@
 .projectTags {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+  margin-bottom: clamp(0.625rem, 1.5vw, 1rem);
   flex-wrap: wrap;
 }
 
@@ -550,13 +707,19 @@
   font-size: clamp(0.825rem, 1.1vw, 1rem);
   line-height: 1.6;
   flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .projectAction {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(0.875rem, 1.5vw, 1.25rem);
   color: var(--accent-cyan);
   font-weight: 600;
   font-size: clamp(0.825rem, 1.1vw, 0.9375rem);
@@ -697,39 +860,328 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
+  .glowTop {
+    top: -12%;
+    width: 120vw;
+    height: 360px;
+    filter: blur(80px);
+    opacity: 0.8;
+  }
+
+  .heroWrapper {
+    min-height: 100dvh;
+  }
+
+  .heroInner {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5.5rem 0.875rem 2rem;
+  }
+
+  .heroBadge {
+    margin-bottom: 1rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(2.15rem, 13vw, 3.4rem);
+    line-height: 0.98;
+    max-width: 10ch;
+  }
+
+  .heroLead {
+    margin: 0 auto 1.5rem;
+    max-width: 36ch;
+    font-size: 1rem;
+  }
+
+  .heroActions {
+    width: min(100%, 24rem);
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin: 0 auto;
+  }
+
+  .heroActions > * {
+    width: 100%;
+  }
+
+  .heroActions > * > .primaryButton,
+  .heroActions > * > .secondaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .marqueeContainer {
+    width: 100%;
+    left: 0;
+    transform: none;
+    margin-top: 0.25rem;
+    padding: 0.875rem 0;
+  }
+
+  .marqueeContainer::before,
+  .marqueeContainer::after {
+    width: 2.5rem;
+  }
+
+  .marqueeTrack {
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .sectionBlock {
+    min-height: auto;
+    align-items: stretch;
+    padding: 3.25rem 0.875rem;
+  }
+
+  .sectionHeader {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .sectionLead {
+    margin: 0 auto;
+  }
+
   .navLinks {
     display: none;
   }
 
+  .railShell {
+    --rail-card-width: clamp(17rem, 78vw, 30rem);
+  }
+
   .bentoGrid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--rail-card-width);
+    grid-template-columns: none;
+    gap: 0.875rem;
+    max-width: none;
+    margin: 0;
+    justify-content: flex-start;
+    padding: 0.95rem calc((100% - var(--rail-card-width)) / 2) 1.1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: calc((100% - var(--rail-card-width)) / 2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    touch-action: pan-x;
+  }
+
+  .bentoGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .railArrow {
+    display: flex;
   }
 
   .bentoLarge {
-    grid-column: span 1;
+    grid-column: auto;
+  }
+
+  .bentoCard {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    text-align: center;
+  }
+
+  .bentoIcon {
+    margin-inline: auto;
+  }
+
+  .bentoActionRow {
+    justify-content: center;
   }
 
   .projectsGrid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--rail-card-width);
+    grid-template-columns: none;
+    gap: 0.875rem;
+    max-width: none;
+    margin: 0;
+    justify-content: flex-start;
+    padding: 0.95rem calc((100% - var(--rail-card-width)) / 2) 1.1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: calc((100% - var(--rail-card-width)) / 2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    touch-action: pan-x;
+  }
+
+  .projectsGridProjects {
+    gap: 0.875rem;
+  }
+
+  .bentoGrid::-webkit-scrollbar,
+  .projectsGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .projectCard {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .bentoCard {
+    min-height: auto;
+  }
+
+  .projectCardInner {
+    min-height: 100%;
+  }
+
+  .projectImageWrapper {
+    aspect-ratio: 16 / 8.5;
+  }
+
+  .projectContent {
+    text-align: center;
+    padding: 0.9rem;
+  }
+
+  .projectTags {
+    justify-content: center;
+    margin-bottom: 0.85rem;
+  }
+
+  .projectTitle {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .projectRole {
+    text-align: center;
+  }
+
+  .projectAction {
+    margin-inline: auto;
+  }
+
+  .projectDesc {
+    font-size: 0.875rem;
+    -webkit-line-clamp: 4;
+  }
+
+  .ctaSection {
+    min-height: auto;
+    padding: 3.5rem 0.875rem;
+  }
+
+  .ctaTitle {
+    font-size: clamp(1.85rem, 9vw, 2.9rem);
+  }
+
+  .ctaDesc {
+    margin: 0 auto 1.5rem;
+    font-size: 1rem;
   }
 
   .footerTop {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2.5rem 0;
+  }
+
+  .footerLinks {
+    display: grid;
+    gap: 1.5rem;
   }
 
   .footerBrand {
-    grid-column: span 2;
+    grid-column: auto;
     padding-right: 0;
   }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .navLink:hover,
+  .navCta:hover,
+  .primaryButton:hover,
+  .secondaryButton:hover,
+  .projectAction:hover,
+  .footerLink:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .projectCard:hover .projectImage {
+    transform: none;
+  }
+
+  .projectAction:hover {
+    gap: 0.5rem;
+  }
+}
+
 @media (max-width: 480px) {
+  .heroInner {
+    padding-top: 5.25rem;
+  }
+
+  .heroTitle {
+    max-width: 9ch;
+  }
+
+  .heroLead {
+    max-width: 32ch;
+  }
+
+  .bentoGrid,
+  .projectsGrid {
+    grid-auto-columns: var(--rail-card-width);
+    margin: 0;
+    padding: 0.95rem calc((100% - var(--rail-card-width)) / 2) 1.1rem;
+    scroll-padding-inline: calc((100% - var(--rail-card-width)) / 2);
+  }
+
+  .projectsGridProjects {
+    gap: 0.875rem;
+  }
+
+  .bentoIcon {
+    margin-inline: auto;
+  }
+
+  .bentoActionRow {
+    justify-content: center;
+  }
+
+  .projectDesc {
+    -webkit-line-clamp: 5;
+  }
+
+  .railArrow {
+    right: calc((100% - var(--rail-card-width)) / 2 - 0.5rem);
+  }
+
+  .bentoCard,
+  .projectCard {
+    min-width: 0;
+  }
+
+  .sectionBlock {
+    padding-inline: 0.75rem;
+  }
+
   .footerTop {
-    grid-template-columns: 1fr;
+    padding: 2rem 0 2.5rem;
   }
 
   .footerBrand {
-    grid-column: span 1;
+    grid-column: auto;
   }
 }
