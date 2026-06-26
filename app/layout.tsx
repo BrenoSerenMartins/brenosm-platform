@@ -142,6 +142,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
+        <span className="firstPaintSentinel" aria-hidden="true">
+          .
+        </span>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
