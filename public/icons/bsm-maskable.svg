@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BSM Studio">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2bb7ff"/>
+      <stop offset="0.52" stop-color="#4f8dff"/>
+      <stop offset="1" stop-color="#6d65ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="#02040a"/>
+  <circle cx="256" cy="256" r="204" fill="url(#bg)"/>
+  <path fill="#fff" d="M177 156h92c49 0 77 24 77 62 0 21-10 38-30 50 28 11 43 32 43 63 0 43-33 71-84 71h-98V156Zm86 100c25 0 40-11 40-30 0-18-14-29-39-29h-41v59h40Zm8 106c27 0 43-13 43-34 0-22-16-34-45-34h-46v68h48Z"/>
+</svg>

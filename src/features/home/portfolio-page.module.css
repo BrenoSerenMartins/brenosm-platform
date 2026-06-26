@@ -247,6 +247,18 @@
   transform: translateY(-1px);
 }
 
+.navLink:focus-visible,
+.navCta:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.bentoAction:focus-visible,
+.featureModalClose:focus-visible,
+.projectAction:focus-visible,
+.footerLink:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 4px;
+}
+
 /* ===== Marquee ===== */
 .marqueeContainer {
   width: 105%;
@@ -675,6 +687,11 @@
   color: var(--text-soft);
 }
 
+.projectTagAccent {
+  border-color: var(--accent-violet);
+  color: var(--accent-violet);
+}
+
 .projectTitle {
   font-size: clamp(1.125rem, 1.8vw, 1.5rem);
   font-weight: 700;
@@ -684,6 +701,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+  overflow-wrap: anywhere;
 }
 
 .projectPeriod {
@@ -1183,5 +1201,29 @@
 
   .footerBrand {
     grid-column: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .railShell {
+    --rail-card-width: clamp(16rem, 82vw, 19rem);
+  }
+
+  .projectContent {
+    padding: 0.85rem;
+  }
+
+  .projectTitle {
+    font-size: 1.05rem;
+  }
+
+  .projectTag {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding-inline: 1rem;
   }
 }

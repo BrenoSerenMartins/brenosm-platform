@@ -1,13 +1,15 @@
 export const siteConfig = {
   name: "BSM Studio",
   url: "https://brenosm.cloud",
-  title: "BSM Studio | SaaS & Landing Pages de Alta Conversão",
+  title: "BSM Studio | SaaS, MVPs e Landing Pages de Alta Conversão",
   description:
-    "Transformamos ideias em software. Construção de MVPs, SaaS, Sistemas Web e Landing Pages projetadas para performance e escala.",
-  contactEmail: "brenosm.dev@gmail.com",
-  ogImage: "https://brenosm.cloud/og-image.jpg",
+    "Estúdio de software para MVPs, SaaS, sistemas web e landing pages premium com foco em conversão, escala e execução rápida.",
+  contactEmail: "contato@brenosm.dev",
+  whatsappUrl:
+    "https://wa.me/5514988004041?text=Oi%20Breno%2C%20quero%20conversar%20sobre%20um%20projeto.",
+  ogImage: "/opengraph-image",
   socialLinks: {
-    github: "",
-    linkedin: "brenoserenmartins",
+    github: "https://github.com/BrenoSerenMartins",
+    linkedin: "https://linkedin.com/in/brenoserenmartins",
   },
 } as const;

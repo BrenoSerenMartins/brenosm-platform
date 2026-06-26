@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useScroll, useMotionValue, useSpring, useTrans
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "@/src/features/home/portfolio-page.module.css";
 import projectsData from "@/src/content/projects.json";
+import { siteConfig } from "@/src/config/site";
 import { useSupportsHover } from "@/src/lib/use-supports-hover";
 
 const baseMarquee = [
@@ -14,6 +15,71 @@ const baseMarquee = [
 
 // Repetimos 4 vezes para preencher bem a tela em 4K e metade (50%) ser exatamente 2 repetições completas.
 const techMarquee = [...baseMarquee, ...baseMarquee, ...baseMarquee, ...baseMarquee];
+
+const projectFallbackImage = "/projects/platform-portfolio/cover.svg";
+const socialLinks = siteConfig.socialLinks;
+
+type ProjectType = "project" | "experience";
+
+type RawProject = {
+  id?: unknown;
+  title?: unknown;
+  role?: unknown;
+  period?: unknown;
+  description?: unknown;
+  image?: unknown;
+  url?: unknown;
+  technologies?: unknown;
+  type?: unknown;
+};
+
+type ProjectItem = {
+  id: string;
+  title: string;
+  role?: string;
+  period?: string;
+  description: string;
+  image: string;
+  url?: string;
+  technologies: string[];
+  type: ProjectType;
+};
+
+function readText(value: unknown, fallback: string) {
+  return typeof value === "string" && value.trim().length > 0 ? value.trim() : fallback;
+}
+
+function readOptionalText(value: unknown) {
+  return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
+}
+
+function normalizeProject(project: RawProject, index: number): ProjectItem {
+  const title = readText(project.title, "Projeto em destaque");
+
+  return {
+    id: readText(project.id, `project-${index}`),
+    title,
+    role: readOptionalText(project.role),
+    period: readOptionalText(project.period),
+    description: readText(
+      project.description,
+      "Projeto digital desenvolvido com foco em execução, produto e experiência de uso.",
+    ),
+    image: readText(project.image, projectFallbackImage),
+    url: readOptionalText(project.url),
+    technologies: Array.isArray(project.technologies)
+      ? project.technologies
+        .filter((technology): technology is string => typeof technology === "string")
+        .map((technology) => technology.trim())
+        .filter(Boolean)
+      : [],
+    type: project.type === "experience" ? "experience" : "project",
+  };
+}
+
+const normalizedProjects = (projectsData as RawProject[]).map(normalizeProject);
+const portfolioProjects = normalizedProjects.filter((project) => project.type === "project");
+const experienceProjects = normalizedProjects.filter((project) => project.type === "experience");
 
 type BentoFeature = {
   title: string;
@@ -194,14 +260,37 @@ function RailStage({
   );
 }
 
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-};
+function ProjectTags({
+  technologies,
+  leadLabel,
+}: {
+  technologies: string[];
+  leadLabel?: string;
+}) {
+  const visibleTechnologies = technologies.length > 0 ? technologies.slice(0, 3) : ["Produto digital"];
+  const remainingCount = technologies.length > visibleTechnologies.length
+    ? technologies.length - visibleTechnologies.length
+    : 0;
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+  return (
+    <div className={styles.projectTags}>
+      {leadLabel ? (
+        <span className={`${styles.projectTag} ${styles.projectTagAccent}`}>{leadLabel}</span>
+      ) : null}
+      {visibleTechnologies.map((technology) => (
+        <span key={technology} className={styles.projectTag}>{technology}</span>
+      ))}
+      {remainingCount > 0 ? (
+        <span className={styles.projectTag}>+{remainingCount}</span>
+      ) : null}
+    </div>
+  );
+}
+
+const heroEntrance = {
+  initial: { opacity: 0, y: 20, scale: 0.985, filter: "blur(8px)" },
+  animate: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
 };
 
 function TiltCard({ children, className, idx = 0 }: { children: React.ReactNode; className?: string; idx?: number }) {
@@ -448,6 +537,8 @@ function MagneticWrapper({ children }: { children: React.ReactNode }) {
 export function HomePage() {
   const { scrollYProgress } = useScroll();
   const [activeFeatureIndex, setActiveFeatureIndex] = useState<number | null>(null);
+  const featureModalRef = useRef<HTMLDivElement | null>(null);
+  const featureModalCloseRef = useRef<HTMLButtonElement | null>(null);
 
   const yParallax1 = useTransform(scrollYProgress, [0, 1], [0, -400]);
   const yParallax2 = useTransform(scrollYProgress, [0, 1], [0, 400]);
@@ -459,19 +550,61 @@ export function HomePage() {
     }
 
     const previousOverflow = document.body.style.overflow;
+    const previousActiveElement = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const focusFrame = window.requestAnimationFrame(() => {
+      featureModalCloseRef.current?.focus({ preventScroll: true });
+    });
+
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setActiveFeatureIndex(null);
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const modal = featureModalRef.current;
+      if (!modal) {
+        return;
+      }
+
+      const focusableElements = modal.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+        return;
+      }
+
+      if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      window.cancelAnimationFrame(focusFrame);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      previousActiveElement?.focus({ preventScroll: true });
     };
   }, [activeFeature]);
 
@@ -517,35 +650,55 @@ export function HomePage() {
           transition={{ duration: 15, ease: "easeInOut", repeat: Infinity, delay: 1 }}
         />
 
-        <motion.div
-          className={styles.heroInner}
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-        >
-          <motion.h1 className={styles.heroTitle} variants={fadeUp}>
+        <div className={styles.heroInner}>
+          <motion.h1
+            className={styles.heroTitle}
+            initial={heroEntrance.initial}
+            animate={heroEntrance.animate}
+            transition={heroEntrance.transition}
+          >
             Transformamos ideias em{" "}
             <span className={styles.heroTitleAccent}>Sistemas de Alta Conversão</span>.
           </motion.h1>
 
-          <motion.p className={styles.heroLead} variants={fadeUp}>
+          <motion.p
+            className={styles.heroLead}
+            initial={heroEntrance.initial}
+            animate={heroEntrance.animate}
+            transition={{ ...heroEntrance.transition, delay: 0.08 }}
+          >
             Velocidade e escala para o seu negócio. Construímos MVPs, SaaS e Landing Pages premium para quem quer validar rápido e gerar caixa de verdade.
           </motion.p>
 
-          <motion.div className={styles.heroActions} variants={fadeUp}>
+          <motion.div
+            className={styles.heroActions}
+            initial={heroEntrance.initial}
+            animate={heroEntrance.animate}
+            transition={{ ...heroEntrance.transition, delay: 0.16 }}
+          >
             <MagneticWrapper>
-              <a href="#contato" className={styles.primaryButton}>
+              <a
+                href={siteConfig.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.primaryButton}
+                aria-label="Solicitar orçamento pelo WhatsApp"
+              >
                 Solicitar Orçamento
                 <ArrowIcon />
               </a>
             </MagneticWrapper>
             <MagneticWrapper>
-              <a href="#projetos" className={styles.secondaryButton}>
+              <a
+                href="#projetos"
+                className={styles.secondaryButton}
+                aria-label="Ver cases e projetos desenvolvidos"
+              >
                 Ver Cases de Sucesso
               </a>
             </MagneticWrapper>
           </motion.div>
-        </motion.div>
+        </div>
 
       </section>
 
@@ -622,6 +775,7 @@ export function HomePage() {
             onClick={() => setActiveFeatureIndex(null)}
           >
             <motion.div
+              ref={featureModalRef}
               className={styles.featureModal}
               initial={{ opacity: 0, y: 18, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -631,8 +785,10 @@ export function HomePage() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="feature-modal-title"
+              aria-describedby="feature-modal-description"
             >
               <button
+                ref={featureModalCloseRef}
                 type="button"
                 className={styles.featureModalClose}
                 onClick={() => setActiveFeatureIndex(null)}
@@ -643,7 +799,7 @@ export function HomePage() {
               <div className={styles.featureModalIcon}>{activeFeature.icon}</div>
               <p className={styles.sectionKicker}>Diferencial</p>
               <h3 id="feature-modal-title" className={styles.featureModalTitle}>{activeFeature.title}</h3>
-              <p className={styles.featureModalText}>{activeFeature.details}</p>
+              <p id="feature-modal-description" className={styles.featureModalText}>{activeFeature.details}</p>
             </motion.div>
           </motion.div>
         ) : null}
@@ -667,7 +823,7 @@ export function HomePage() {
           </motion.div>
 
           <RailStage railClassName={`${styles.projectsGrid} ${styles.projectsGridProjects}`}>
-              {projectsData.filter(p => p.type === "project").map((project, idx) => (
+              {portfolioProjects.map((project, idx) => (
                 <TiltCard key={project.id} className={styles.projectCard} idx={idx}>
                   <div className={styles.projectImageWrapper} style={{ padding: '2rem' }}>
                     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -683,24 +839,23 @@ export function HomePage() {
                     </div>
                   </div>
                   <div className={styles.projectContent}>
-                    <div className={styles.projectTags}>
-                      {project.technologies.slice(0, 3).map(tech => (
-                        <span key={tech} className={styles.projectTag}>{tech}</span>
-                      ))}
-                      {project.technologies.length > 3 ? (
-                        <span className={styles.projectTag}>+{project.technologies.length - 3}</span>
-                      ) : null}
-                    </div>
+                    <ProjectTags technologies={project.technologies} />
                     <h3 className={styles.projectTitle}>{project.title}</h3>
                     <p className={styles.projectDesc}>{project.description}</p>
                     {project.url ? (
-                      <a href={project.url} target="_blank" rel="noreferrer" className={styles.projectAction}>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.projectAction}
+                        aria-label={`Acessar projeto ${project.title}`}
+                      >
                         Acessar Projeto <ArrowIcon />
                       </a>
                     ) : (
-                      <div className={styles.projectAction}>
+                      <span className={styles.projectAction}>
                         Ver Detalhes <ArrowIcon />
-                      </div>
+                      </span>
                     )}
                   </div>
                 </TiltCard>
@@ -727,7 +882,7 @@ export function HomePage() {
           </motion.div>
 
           <RailStage railClassName={styles.projectsGrid}>
-              {projectsData.filter(p => p.type === "experience").map((project, idx) => (
+              {experienceProjects.map((project, idx) => (
                 <SpotlightCard key={project.id} className={styles.projectCard} idx={idx}>
                   <div className={styles.projectImageWrapper} style={{ background: '#fff', padding: '3rem' }}>
                     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -743,15 +898,7 @@ export function HomePage() {
                     </div>
                   </div>
                   <div className={styles.projectContent}>
-                    <div className={styles.projectTags}>
-                      <span className={styles.projectTag} style={{ borderColor: 'var(--accent-violet)', color: 'var(--accent-violet)' }}>Experiência Profissional</span>
-                      {project.technologies.slice(0, 3).map(tech => (
-                        <span key={tech} className={styles.projectTag}>{tech}</span>
-                      ))}
-                      {project.technologies.length > 3 ? (
-                        <span className={styles.projectTag}>+{project.technologies.length - 3}</span>
-                      ) : null}
-                    </div>
+                    <ProjectTags technologies={project.technologies} leadLabel="Experiência Profissional" />
                     <h3 className={styles.projectTitle}>
                       {project.title}
                       {project.period && <span className={styles.projectPeriod}>{project.period}</span>}
@@ -759,13 +906,19 @@ export function HomePage() {
                     {project.role && <div className={styles.projectRole}>{project.role}</div>}
                     <p className={styles.projectDesc}>{project.description}</p>
                     {project.url ? (
-                      <a href={project.url} target="_blank" rel="noreferrer" className={styles.projectAction}>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.projectAction}
+                        aria-label={`Acessar empresa ${project.title}`}
+                      >
                         Acessar Empresa <ArrowIcon />
                       </a>
                     ) : (
-                      <div className={styles.projectAction}>
+                      <span className={styles.projectAction}>
                         Ver Detalhes <ArrowIcon />
-                      </div>
+                      </span>
                     )}
                   </div>
                 </SpotlightCard>
@@ -797,10 +950,11 @@ export function HomePage() {
             Agende uma consultoria gratuita conosco e descubra como podemos transformar sua ideia em um SaaS ou Landing Page de altíssima conversão.
           </motion.p>
           <motion.a
-            href="https://wa.me/5514988004041"
+            href={siteConfig.whatsappUrl}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className={styles.primaryButton}
+            aria-label="Chamar a BSM Studio no WhatsApp"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -830,15 +984,15 @@ export function HomePage() {
             </div>
             <div className={styles.footerCol}>
               <h4 className={styles.footerColTitle}>Produtos</h4>
-              <a href="https://howmuchlove.com.br" target="_blank" rel="noreferrer" className={styles.footerLink}>HowMuchLove</a>
-              <a href="https://tastly.com.br" target="_blank" rel="noreferrer" className={styles.footerLink}>Tastly</a>
+              <a href="https://howmuchlove.com.br" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>HowMuchLove</a>
+              <a href="https://tastly.com.br" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>Tastly</a>
             </div>
             <div className={styles.footerCol}>
               <h4 className={styles.footerColTitle}>Social</h4>
-              <a href="https://github.com/BrenoSerenMartins" target="_blank" rel="noreferrer" className={styles.footerLink}>GitHub</a>
-              <a href="https://linkedin.com/in/brenoserenmartins" target="_blank" rel="noreferrer" className={styles.footerLink}>LinkedIn</a>
-              <a href="mailto:contato@brenosm.dev" className={styles.footerLink}>E-mail</a>
-              <a href="https://wa.me/5514988004041" target="_blank" rel="noreferrer" className={styles.footerLink}>WhatsApp</a>
+              <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>GitHub</a>
+              <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>LinkedIn</a>
+              <a href={`mailto:${siteConfig.contactEmail}`} className={styles.footerLink}>E-mail</a>
+              <a href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>WhatsApp</a>
             </div>
           </div>
         </div>
