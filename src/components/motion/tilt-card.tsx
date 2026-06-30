@@ -72,9 +72,7 @@ export function TiltCard({ children, className, idx = 0 }: { children: React.Rea
     y.set(0);
   };
 
-  const mobileTilt = idx % 2 === 0
-    ? { rotateX: 5, rotateY: -8 }
-    : { rotateX: 5, rotateY: 8 };
+  const mobileTilt = { rotateX: 0, rotateY: 0 };
 
   return (
     <motion.article
@@ -88,12 +86,12 @@ export function TiltCard({ children, className, idx = 0 }: { children: React.Rea
       style={{
         rotateX: supportsHover ? rotateX : mobileTilt.rotateX,
         rotateY: supportsHover ? rotateY : mobileTilt.rotateY,
-        transformStyle: "preserve-3d",
-        perspective: 1000,
+        transformStyle: supportsHover ? "preserve-3d" : undefined,
+        perspective: supportsHover ? 1000 : undefined,
         willChange: "transform, opacity",
       }}
     >
-      <div className={styles.projectCardInner} style={{ transform: "translateZ(40px)" }}>
+      <div className={styles.projectCardInner} style={{ transform: supportsHover ? "translateZ(40px)" : undefined }}>
         {/* Efeito de brilho que segue o mouse */}
         <motion.div
           style={{

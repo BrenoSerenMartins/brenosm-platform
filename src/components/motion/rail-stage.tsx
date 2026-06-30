@@ -12,11 +12,19 @@ function RailArrow({ visible }: { visible: boolean }) {
       aria-hidden="true"
       initial={false}
       animate={{
-        opacity: visible ? 0.78 : 0,
-        x: visible ? 0 : 2,
-        scale: visible ? 1 : 0.96,
+        opacity: visible ? 0.85 : 0,
+        x: visible ? [0, 6, 0] : 10,
+        scale: visible ? 1 : 0.9,
       }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+      transition={{ 
+        opacity: { duration: 0.3 },
+        scale: { duration: 0.3 },
+        x: visible ? {
+          repeat: Infinity,
+          duration: 1.5,
+          ease: "easeInOut",
+        } : { duration: 0.3 }
+      }}
     >
       <ArrowIcon />
     </motion.div>
