@@ -156,20 +156,30 @@ export function BentoGridSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+                  e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+                }}
               >
-                <div className={styles.bentoGlow} />
-                <div className={styles.bentoIcon}>{feature.icon}</div>
-                <h3 className={styles.bentoTitle}>{feature.title}</h3>
-                <p className={styles.bentoDesc}>{feature.summary}</p>
-                <div className={styles.bentoActionRow}>
-                  <span className={styles.bentoMeta}>Resumo curto</span>
-                  <button
-                    type="button"
-                    className={styles.bentoAction}
-                    onClick={() => setActiveFeatureIndex(idx)}
-                  >
-                    Detalhes
-                  </button>
+                <div className={styles.bentoSpotlight} />
+                <div className={styles.bentoNoise} />
+                <div className={styles.bentoInner}>
+                  <div className={styles.bentoIcon}>{feature.icon}</div>
+                  <h3 className={styles.bentoTitle}>{feature.title}</h3>
+                  <p className={styles.bentoDesc}>{feature.summary}</p>
+                  <div className={styles.bentoActionRow}>
+                    <span className={styles.bentoMeta}>Resumo curto</span>
+                    <button
+                      type="button"
+                      className={styles.bentoAction}
+                      onClick={() => setActiveFeatureIndex(idx)}
+                    >
+                      Detalhes
+                    </button>
+                  </div>
                 </div>
               </motion.article>
             ))}
