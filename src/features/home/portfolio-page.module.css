@@ -203,6 +203,7 @@
   position: relative;
   transform: rotate(-2.5deg) scale(1.05);
   margin-top: clamp(1rem, 2vw, 3rem);
+  margin-bottom: clamp(3rem, 8vh, 6rem);
   z-index: 5;
 }
 
@@ -252,7 +253,7 @@
   position: relative;
   width: 100%;
   min-height: 100dvh;
-  padding: clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 1.5rem);
+  padding: clamp(2rem, 4vh, 4rem) clamp(1rem, 4vw, 1.5rem);
   z-index: 1;
   display: flex;
   align-items: center;
@@ -270,7 +271,8 @@
 /* ===== Section Header ===== */
 .sectionHeader {
   text-align: center;
-  margin-bottom: clamp(2rem, 5vw, 4rem);
+  margin-bottom: clamp(1.5rem, 3vh, 3rem);
+  flex-shrink: 0;
 }
 
 .sectionKicker {
@@ -519,10 +521,10 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  justify-content: center;
+  justify-content: safe center;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 2rem clamp(1rem, 2vw, 1.5rem) 4rem;
+  padding: clamp(1rem, 2vh, 2rem) clamp(1rem, 2vw, 1.5rem);
   scroll-snap-type: x mandatory;
   scroll-padding-inline: clamp(1rem, 2vw, 1.5rem);
   scrollbar-width: none;
@@ -539,7 +541,7 @@
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
   scroll-snap-stop: always;
   will-change: transform, opacity;
 }
@@ -551,7 +553,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: clamp(380px, 50vh, 500px);
+  aspect-ratio: 3 / 4;
+  height: auto;
   background: var(--surface);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow;
@@ -614,7 +617,7 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: clamp(7rem, 35%, 10rem);
+  bottom: clamp(10rem, 45%, 12rem);
 }
 
 .fluidImageContainer.edgeToEdge .fluidImage {
@@ -635,14 +638,14 @@
 .fluidOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.6) 30%, #02040a 65%);
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.6) 20%, #02040a 55%);
   z-index: 2;
   pointer-events: none;
   transition: background 0.4s ease;
 }
 
 .projectCard:hover .fluidOverlay {
-  background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.8) 25%, #02040a 60%);
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.8) 15%, #02040a 50%);
 }
 
 .fluidContent {
