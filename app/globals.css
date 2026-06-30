@@ -21,11 +21,13 @@
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   font-size: clamp(0.96rem, 0.92rem + 0.12vw, 1.02rem);
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
   background:
     radial-gradient(circle at 18% 12%, rgba(61, 141, 255, 0.06), transparent 24%),
     radial-gradient(circle at 82% 18%, rgba(109, 101, 255, 0.05), transparent 22%),

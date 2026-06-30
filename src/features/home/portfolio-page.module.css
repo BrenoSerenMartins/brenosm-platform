@@ -1,74 +1,8 @@
-/* ===== Floating Navbar ===== */
-.navbar {
-  position: fixed;
-  top: clamp(0.75rem, 2vw, 1.25rem);
-  left: 50%;
-  width: min(92vw, 1200px);
-  z-index: 100;
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
-  background: rgba(2, 4, 10, 0.65);
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-}
-
-.navContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: clamp(48px, 7vw, 56px);
-  padding: 0 clamp(1.25rem, 3vw, 2rem);
-}
-
-.navBrand {
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 700;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: -0.02em;
-}
-
 .navBrandAccent {
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
-}
-
-.navLinks {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 2.5vw, 2rem);
-}
-
-.navLink {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: clamp(0.8rem, 1vw, 0.875rem);
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.navLink:hover {
-  color: var(--text);
-}
-
-.navCta {
-  display: inline-flex;
-  align-items: center;
-  padding: clamp(0.375rem, 0.8vw, 0.5rem) clamp(0.875rem, 1.5vw, 1.25rem);
-  font-size: clamp(0.8rem, 1vw, 0.875rem);
-  font-weight: 600;
-  color: #000;
-  background: #fff;
-  border-radius: 999px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.navCta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
 }
 
 /* ===== Page Shell ===== */
@@ -247,8 +181,6 @@
   transform: translateY(-1px);
 }
 
-.navLink:focus-visible,
-.navCta:focus-visible,
 .primaryButton:focus-visible,
 .secondaryButton:focus-visible,
 .bentoAction:focus-visible,
@@ -582,25 +514,20 @@
 .projectsGrid {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(18rem, 24rem);
-  gap: clamp(0.875rem, 2vw, 1.25rem);
+  grid-auto-columns: minmax(17rem, 23rem);
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
   justify-content: center;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.95rem clamp(1rem, 2vw, 1.5rem) 1.05rem;
+  padding: 2rem clamp(1rem, 2vw, 1.5rem) 4rem;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: clamp(1rem, 2vw, 1.5rem);
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
-}
-
-.projectsGridProjects {
-  grid-auto-columns: minmax(17rem, 23rem);
-  gap: clamp(1.25rem, 2.5vw, 1.75rem);
 }
 
 .projectsGrid::-webkit-scrollbar {
@@ -617,136 +544,216 @@
   will-change: transform, opacity;
 }
 
-.projectCardInner {
+.fluidCardInner {
   border-radius: clamp(16px, 2vw, 24px);
   overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--glass-border);
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  justify-content: flex-end;
+  height: clamp(380px, 50vh, 500px);
+  background: var(--surface);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
+  will-change: transform, box-shadow;
+  text-decoration: none;
+  color: inherit;
+  /* Hack para forçar renderização limpa das bordas arredondadas no Safari/Chrome */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  transform: translateZ(0);
 }
 
-.projectCard:hover .projectCardInner {
-  border-color: var(--glass-border-strong);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5);
-}
-
-.parallaxGlow {
+.fluidCardInner::after {
+  content: "";
   position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   pointer-events: none;
-  will-change: transform, opacity;
+  z-index: 20;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.projectImageWrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  background: #111;
-  overflow: hidden;
+.projectCard:hover .fluidCardInner {
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.6);
 }
 
-.projectImage {
+.projectCard:hover .fluidCardInner::after {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.fluidBgBlur {
+  position: absolute;
+  top: -10%; left: -10%;
+  width: 120%; height: 120%;
   object-fit: cover;
+  filter: blur(40px) saturate(1.5);
+  opacity: 0.3;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.projectCard:hover .fluidBgBlur {
+  opacity: 0.5;
+}
+
+.fluidImageContainer {
+  position: absolute;
+  top: clamp(1.5rem, 3vw, 2.5rem);
+  left: clamp(1.5rem, 3vw, 2.5rem);
+  right: clamp(1.5rem, 3vw, 2.5rem);
+  bottom: clamp(9rem, 45%, 12rem);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fluidImageContainer.edgeToEdge {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: clamp(7rem, 35%, 10rem);
+}
+
+.fluidImageContainer.edgeToEdge .fluidImage {
+  border-radius: 0;
+}
+
+.fluidImage {
+  object-fit: contain;
+  border-radius: clamp(8px, 1.5vw, 12px);
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
-.projectCard:hover .projectImage {
-  transform: scale(1.04);
+.projectCard:hover .fluidImage {
+  transform: scale(1.03);
 }
 
-.projectContent {
-  padding: clamp(1rem, 2vw, 1.5rem);
+.fluidOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.6) 30%, #02040a 65%);
+  z-index: 2;
+  pointer-events: none;
+  transition: background 0.4s ease;
+}
+
+.projectCard:hover .fluidOverlay {
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.8) 25%, #02040a 60%);
+}
+
+.fluidContent {
+  position: relative;
+  z-index: 3;
+  padding: clamp(1.2rem, 2vw, 1.5rem);
   display: flex;
   flex-direction: column;
-  flex: 1;
+  gap: 0.6rem;
+  transform: translateY(12px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.projectCard:hover .fluidContent {
+  transform: translateY(0);
 }
 
 .projectTags {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: clamp(0.625rem, 1.5vw, 1rem);
+  margin-bottom: 0.2rem;
   flex-wrap: wrap;
 }
 
 .projectTag {
-  font-size: clamp(0.675rem, 0.9vw, 0.75rem);
-  font-weight: 600;
-  padding: clamp(0.2rem, 0.5vw, 0.25rem) clamp(0.5rem, 1vw, 0.75rem);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  color: var(--text-soft);
+  font-size: clamp(0.6rem, 0.8vw, 0.7rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .projectTagAccent {
-  border-color: var(--accent-violet);
-  color: var(--accent-violet);
+  background: linear-gradient(180deg, rgba(109, 101, 255, 0.25) 0%, rgba(109, 101, 255, 0.1) 100%);
+  border-color: rgba(109, 101, 255, 0.4);
+  box-shadow: inset 0 1px 0 0 rgba(109, 101, 255, 0.3);
+  color: #c9c6ff;
 }
 
-.projectTitle {
+.fluidTitle {
   font-size: clamp(1.125rem, 1.8vw, 1.5rem);
   font-weight: 700;
-  margin-bottom: clamp(0.2rem, 0.5vw, 0.5rem);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  overflow-wrap: anywhere;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.1rem;
+  color: #fff;
 }
 
-.projectPeriod {
-  font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+.fluidMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin-top: -0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.fluidRole {
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  font-weight: 600;
+  color: #c9c6ff; /* soft accent color */
+}
+
+.fluidPeriod {
+  font-size: clamp(0.65rem, 0.8vw, 0.75rem);
   font-weight: 500;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.1rem 0.35rem;
   border-radius: 4px;
 }
 
-.projectRole {
-  font-size: clamp(0.875rem, 1.1vw, 1rem);
-  font-weight: 600;
-  color: var(--accent-violet);
-  margin-bottom: clamp(0.5rem, 1vw, 1rem);
-}
-
-.projectDesc {
+.fluidDesc {
   color: var(--text-muted);
-  font-size: clamp(0.825rem, 1.1vw, 1rem);
-  line-height: 1.6;
-  flex: 1;
+  font-size: clamp(0.825rem, 1.1vw, 0.9rem);
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  overflow-wrap: anywhere;
-  hyphens: auto;
+  opacity: 0.8;
+  transition: opacity 0.4s ease;
 }
 
-.projectAction {
+.projectCard:hover .fluidDesc {
+  opacity: 1;
+}
+
+.fluidAction {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: clamp(0.875rem, 1.5vw, 1.25rem);
+  margin-top: 0.25rem;
   color: var(--accent-cyan);
   font-weight: 600;
   font-size: clamp(0.825rem, 1.1vw, 0.9375rem);
-  text-decoration: none;
-  transition: gap 0.2s ease;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.projectAction:hover {
-  gap: 0.75rem;
+.projectCard:hover .fluidAction {
+  opacity: 1;
+  transform: translateY(0);
+  gap: 0.8rem;
+  color: #fff;
 }
 
 /* ===== CTA Section ===== */
@@ -964,10 +971,6 @@
     margin: 0 auto;
   }
 
-  .navLinks {
-    display: none;
-  }
-
   .railShell {
     --rail-card-width: clamp(17rem, 78vw, 30rem);
   }
@@ -1126,8 +1129,6 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .navLink:hover,
-  .navCta:hover,
   .primaryButton:hover,
   .secondaryButton:hover,
   .projectAction:hover,

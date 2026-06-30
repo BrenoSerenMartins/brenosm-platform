@@ -12,7 +12,7 @@
     "id": "tastly",
     "title": "Tastly",
     "description": "Plataforma operacional all-in-one para restaurantes. Solução unificada para gestão de canal próprio, pedidos, cozinha, estoque e branding.",
-    "image": "/projects/tastly/cover.svg",
+    "image": "/projects/tastly-cover.avif",
     "url": "https://tastly.com.br",
     "technologies": ["React", "Supabase", "Node.js"],
     "type": "project"
@@ -23,7 +23,7 @@
     "role": "Desenvolvedor Fullstack",
     "period": "Nov/2020 — Nov/2025",
     "description": "Potencializando e-commerces com evolução contínua. Desenvolvimento e sustentação de lojas virtuais personalizadas, infraestrutura escalável e integrações profundas.",
-    "image": "/projects/bizcommerce-logo.svg",
+    "image": "/projects/bizcommerce-logo.avif",
     "url": "https://www.bizcommerce.com.br",
     "technologies": ["PHP", "Magento 1 & 2", "Redis", "Elasticsearch", "MySQL"],
     "type": "experience"

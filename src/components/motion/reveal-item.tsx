@@ -10,20 +10,11 @@ type RevealItemProps = PropsWithChildren<{
   delay?: number;
 }>;
 
-export function RevealItem({
-  children,
-  className,
-  variant = "up",
-  delay,
-}: RevealItemProps) {
+export function RevealItem({ children, className, variant = "up", delay }: RevealItemProps) {
   const variants = variant === "soft" ? revealSoftItem : revealUpItem;
 
   return (
-    <motion.div
-      className={className}
-      variants={variants}
-      transition={delay ? { delay } : undefined}
-    >
+    <motion.div className={className} variants={variants} transition={delay ? { delay } : undefined}>
       {children}
     </motion.div>
   );
