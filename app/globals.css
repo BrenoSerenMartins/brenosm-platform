@@ -24,9 +24,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
 html {
   font-size: clamp(0.96rem, 0.92rem + 0.12vw, 1.02rem);
-  scroll-behavior: smooth;
   overscroll-behavior-y: none;
   background:
     radial-gradient(circle at 18% 12%, rgba(61, 141, 255, 0.06), transparent 24%),

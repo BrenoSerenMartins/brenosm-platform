@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { siteConfig } from "@/src/config/site";
+import { SmoothScrollProvider } from "@/src/components/providers/smooth-scroll-provider";
+import { CustomCursor } from "@/src/components/ui/custom-cursor";
 import "./globals.css";
 
 const siteUrl = new URL(siteConfig.url);
@@ -142,16 +144,19 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <span className="firstPaintSentinel" aria-hidden="true">
-          .
-        </span>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-          }}
-        />
-        {children}
+        <SmoothScrollProvider>
+          <CustomCursor />
+          <span className="firstPaintSentinel" aria-hidden="true">
+            .
+          </span>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+            }}
+          />
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );
