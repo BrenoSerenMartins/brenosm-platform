@@ -39,9 +39,8 @@ export function CustomCursor() {
   });
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      return;
-    }
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!isVisible) setIsVisible(true);
@@ -115,7 +114,10 @@ export function CustomCursor() {
     };
   }, [cursorX, cursorY, isVisible, mouseX, mouseY]);
 
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+  if (typeof window !== "undefined" && (
+    window.matchMedia("(pointer: coarse)").matches ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  )) {
     return null;
   }
 

@@ -5,6 +5,9 @@ import Lenis from "lenis";
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
+    // Respeita a preferência do sistema operacional
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     let frameId: number | null = null;
     const lenis = new Lenis({
       duration: 1.2,

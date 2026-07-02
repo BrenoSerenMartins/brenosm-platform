@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { siteConfig } from "@/src/config/site";
 import { SmoothScrollProvider } from "@/src/components/providers/smooth-scroll-provider";
 import { CustomCursor } from "@/src/components/ui/custom-cursor";
+import { LoadingScreen } from "@/src/components/ui/loading-screen";
 import "./globals.css";
 
 const siteUrl = new URL(siteConfig.url);
@@ -145,6 +146,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <SmoothScrollProvider>
+          <LoadingScreen />
           <CustomCursor />
           <span className="firstPaintSentinel" aria-hidden="true">
             .
