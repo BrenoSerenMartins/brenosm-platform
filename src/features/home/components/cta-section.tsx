@@ -8,6 +8,7 @@ import styles from "@/src/features/home/portfolio-page.module.css";
 export function CtaSection() {
   return (
     <section id="contato" className={styles.ctaSection}>
+      <div className={styles.glassGrid} />
       <div className={styles.ctaGlow} />
       <div className={styles.ctaContent}>
         <motion.h2

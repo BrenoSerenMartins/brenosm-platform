@@ -151,11 +151,21 @@ export function BentoGridSection() {
             {bentoFeatures.map((feature, idx) => (
               <motion.article
                 key={idx}
+                layoutId={`bento-card-${idx}`}
                 className={`${styles.bentoCard} ${feature.large ? styles.bentoLarge : ""}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
+                onClick={() => setActiveFeatureIndex(idx)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveFeatureIndex(idx);
+                  }
+                }}
                 onMouseMove={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const x = e.clientX - rect.left;
@@ -167,19 +177,9 @@ export function BentoGridSection() {
                 <div className={styles.bentoSpotlight} />
                 <div className={styles.bentoNoise} />
                 <div className={styles.bentoInner}>
-                  <div className={styles.bentoIcon}>{feature.icon}</div>
-                  <h3 className={styles.bentoTitle}>{feature.title}</h3>
+                  <motion.div layoutId={`bento-icon-${idx}`} className={styles.bentoIcon}>{feature.icon}</motion.div>
+                  <motion.h3 layoutId={`bento-title-${idx}`} className={styles.bentoTitle}>{feature.title}</motion.h3>
                   <p className={styles.bentoDesc}>{feature.summary}</p>
-                  <div className={styles.bentoActionRow}>
-                    <span className={styles.bentoMeta}>Resumo curto</span>
-                    <button
-                      type="button"
-                      className={styles.bentoAction}
-                      onClick={() => setActiveFeatureIndex(idx)}
-                    >
-                      Detalhes
-                    </button>
-                  </div>
                 </div>
               </motion.article>
             ))}
@@ -198,16 +198,14 @@ export function BentoGridSection() {
           >
             <motion.div
               ref={featureModalRef}
+              layoutId={`bento-card-${activeFeatureIndex}`}
               className={styles.featureModal}
-              initial={{ opacity: 0, y: 18, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 18, scale: 0.98 }}
-              transition={{ duration: 0.22 }}
               onClick={(event) => event.stopPropagation()}
               role="dialog"
               aria-modal="true"
               aria-labelledby="feature-modal-title"
               aria-describedby="feature-modal-description"
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
               <button
                 ref={featureModalCloseRef}
@@ -218,10 +216,22 @@ export function BentoGridSection() {
               >
                 Fechar
               </button>
-              <div className={styles.featureModalIcon}>{activeFeature.icon}</div>
+              <motion.div layoutId={`bento-icon-${activeFeatureIndex}`} className={styles.featureModalIcon}>
+                {activeFeature.icon}
+              </motion.div>
               <p className={styles.sectionKicker}>Diferencial</p>
-              <h3 id="feature-modal-title" className={styles.featureModalTitle}>{activeFeature.title}</h3>
-              <p id="feature-modal-description" className={styles.featureModalText}>{activeFeature.details}</p>
+              <motion.h3 layoutId={`bento-title-${activeFeatureIndex}`} id="feature-modal-title" className={styles.featureModalTitle}>
+                {activeFeature.title}
+              </motion.h3>
+              <motion.p 
+                id="feature-modal-description" 
+                className={styles.featureModalText}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+              >
+                {activeFeature.details}
+              </motion.p>
             </motion.div>
           </motion.div>
         ) : null}
