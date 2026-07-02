@@ -34,7 +34,7 @@
     "role": "Desenvolvedor Fullstack",
     "period": "Mar/2026 — Presente",
     "description": "Soluções completas para Adquirentes, Subadquirentes e Marketplaces. Atuação em módulos de conciliação de recebíveis, gateway de pagamentos e obrigações regulatórias.",
-    "image": "/projects/movingpay-logo.png",
+    "image": "/projects/movingpay-logo.avif",
     "url": "https://movingpay.com.br",
     "technologies": ["Node.js", "React", "Next.js", "MySQL", "PostgreSQL", "AWS"],
     "type": "experience"
