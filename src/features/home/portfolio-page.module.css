@@ -521,19 +521,6 @@
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
-.featureModalClose {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
-}
 
 .featureModalIcon {
   width: 56px;
@@ -876,12 +863,9 @@
 }
 
 .footerLogo {
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
   display: block;
-  margin-bottom: clamp(0.5rem, 1vw, 1rem);
+  margin-bottom: clamp(0.75rem, 1.5vw, 1.25rem);
 }
 
 .footerTagline {

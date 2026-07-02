@@ -1,6 +1,8 @@
 import { siteConfig } from "@/src/config/site";
 import styles from "@/src/features/home/portfolio-page.module.css";
 
+import { BrandLogo } from "@/src/components/ui/brand-logo";
+
 const socialLinks = siteConfig.socialLinks;
 
 export function FooterSection() {
@@ -8,9 +10,7 @@ export function FooterSection() {
     <footer className={styles.footer}>
       <div className={styles.footerTop}>
         <div className={styles.footerBrand}>
-          <span className={styles.footerLogo}>
-            <span className={styles.navBrandAccent}>BSM</span> Studio
-          </span>
+          <BrandLogo className={styles.footerLogo} />
           <p className={styles.footerTagline}>Transformando ideias em sistemas de alta conversão.</p>
         </div>
         <div className={styles.footerLinks}>
@@ -35,7 +35,7 @@ export function FooterSection() {
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2026 BSM Studio</p>
+        <p>© 2026 BSM Studio, Todos os direitos reservados.</p>
       </div>
     </footer>
   );

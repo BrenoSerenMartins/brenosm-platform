@@ -61,7 +61,6 @@ const bentoFeatures: BentoFeature[] = [
 export function BentoGridSection() {
   const [activeFeatureIndex, setActiveFeatureIndex] = useState<number | null>(null);
   const featureModalRef = useRef<HTMLDivElement | null>(null);
-  const featureModalCloseRef = useRef<HTMLButtonElement | null>(null);
 
   const activeFeature = activeFeatureIndex === null ? null : bentoFeatures[activeFeatureIndex] ?? null;
 
@@ -75,7 +74,7 @@ export function BentoGridSection() {
       ? document.activeElement
       : null;
     const focusFrame = window.requestAnimationFrame(() => {
-      featureModalCloseRef.current?.focus({ preventScroll: true });
+      featureModalRef.current?.focus({ preventScroll: true });
     });
 
     document.body.style.overflow = "hidden";
@@ -206,16 +205,11 @@ export function BentoGridSection() {
               aria-labelledby="feature-modal-title"
               aria-describedby="feature-modal-description"
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              tabIndex={-1}
             >
-              <button
-                ref={featureModalCloseRef}
-                type="button"
-                className={styles.featureModalClose}
-                onClick={() => setActiveFeatureIndex(null)}
-                aria-label="Fechar detalhes"
-              >
-                Fechar
-              </button>
+              <div className={styles.bentoSpotlight} style={{ opacity: 0.6 }} />
+              <div className={styles.bentoNoise} />
+              
               <motion.div layoutId={`bento-icon-${activeFeatureIndex}`} className={styles.featureModalIcon}>
                 {activeFeature.icon}
               </motion.div>
