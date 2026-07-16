@@ -21,7 +21,7 @@
   left: 50%;
   width: 70vw;
   height: 600px;
-  background: radial-gradient(circle, rgba(43, 183, 255, 0.12) 0%, rgba(109, 101, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(43, 183, 255, 0.07) 0%, rgba(109, 101, 255, 0) 70%);
   transform: translateX(-50%);
   pointer-events: none;
   z-index: 0;
@@ -100,21 +100,21 @@
   filter: blur(120px);
   z-index: 0;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.035;
   will-change: transform, opacity;
 }
 
 .heroAurora1 {
-  width: clamp(300px, 40vw, 600px);
-  height: clamp(300px, 40vw, 600px);
+  width: clamp(250px, 30vw, 450px);
+  height: clamp(250px, 30vw, 450px);
   background: var(--accent-violet);
   top: 10%;
   left: 10%;
 }
 
 .heroAurora2 {
-  width: clamp(250px, 35vw, 500px);
-  height: clamp(250px, 35vw, 500px);
+  width: clamp(200px, 25vw, 400px);
+  height: clamp(200px, 25vw, 400px);
   background: var(--accent-cyan);
   bottom: 15%;
   right: 15%;
@@ -469,7 +469,7 @@
   pointer-events: none;
   background: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(43, 183, 255, 0.08),
+    rgba(43, 183, 255, 0.05),
     transparent 40%
   );
   z-index: 0;
@@ -516,8 +516,8 @@
   width: min(100%, 34rem);
   border: 1px solid var(--glass-border-strong);
   border-radius: 28px;
-  background: linear-gradient(180deg, rgba(12, 16, 28, 0.98), rgba(7, 10, 18, 0.98));
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  background: linear-gradient(180deg, rgba(10, 14, 24, 0.98), rgba(6, 9, 16, 0.98));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.65);
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
@@ -813,7 +813,7 @@
   width: clamp(300px, 50vw, 600px);
   height: clamp(300px, 50vw, 600px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(109, 101, 255, 0.1) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(109, 101, 255, 0.06) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
