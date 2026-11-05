@@ -42,7 +42,7 @@ export function ProjectsSection() {
                       alt={project.title}
                       fill
                       className={styles.fluidImage}
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: 'cover', translate: `0 ${project.imageOffsetY}px` }}
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       unoptimized
                     />
@@ -73,7 +73,7 @@ export function ProjectsSection() {
                       alt={project.title}
                       fill
                       className={styles.fluidImage}
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: 'cover', translate: `0 ${project.imageOffsetY}px` }}
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       unoptimized
                     />

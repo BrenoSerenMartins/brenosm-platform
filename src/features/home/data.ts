@@ -9,6 +9,7 @@ type RawProject = {
   period?: unknown;
   description?: unknown;
   image?: unknown;
+  imageOffsetY?: unknown;
   url?: unknown;
   technologies?: unknown;
   type?: unknown;
@@ -21,6 +22,7 @@ export type ProjectItem = {
   period?: string;
   description: string;
   image: string;
+  imageOffsetY: number;
   url?: string;
   technologies: string[];
   type: ProjectType;
@@ -49,6 +51,9 @@ function normalizeProject(project: RawProject, index: number): ProjectItem {
       "Projeto digital desenvolvido com foco em execução, produto e experiência de uso.",
     ),
     image: readText(project.image, projectFallbackImage),
+    imageOffsetY: typeof project.imageOffsetY === "number" && Number.isFinite(project.imageOffsetY)
+      ? project.imageOffsetY
+      : 0,
     url: readOptionalText(project.url),
     technologies: Array.isArray(project.technologies)
       ? project.technologies
