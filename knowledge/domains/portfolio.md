@@ -17,9 +17,9 @@ Existing notes: [home](../../.ai-reference/modules/home.md),
 
 - Listed as a project in `src/content/projects.json`; pilot URL supplied by the owner: `https://mywallet-pilot.onrender.com/`.
 - Description and stack verified in the sibling `PlannedWallet` README and package manifests.
-- Cover: `public/projects/plannedwallet-cover-v2.avif`, generated with the built-in image tool using the original brand and existing portfolio covers as references; runtime does not depend on the sibling directory.
+- Cover: `public/projects/plannedwallet-cover-v3.avif`, generated with the built-in image tool using the original brand and existing portfolio covers as references; runtime does not depend on the sibling directory.
 - Scope describes implemented personal finance features; full investment/net-worth tracking is deferred in the source project.
 - The cover uses the same 3:2 composition and standard card framing as other projects.
-- Optional `imageOffsetY` shifts the foreground image in pixels for optical wordmark alignment; normalization defaults to zero. PlannedWallet uses +8px. Ambient backgrounds and hover scaling remain independent. Check alignment on desktop/mobile when changing the offset.
 - Generation prompt: preserve the sage folded-plane symbol and exact PlannedWallet wordmark; center the lockup with generous margins on a near-black background, subtle sage atmosphere, no panels, frames or additional text. Convert the generated PNG to AVIF for delivery.
 - V2 prompt: move the symbol and wordmark slightly downward together, preserving horizontal position, scale, background and identity, to align optically with neighboring wordmarks. Version the asset URL to avoid stale browser caches.
+- V3 prompt: move only the symbol and wordmark downward inside the unchanged full-bleed 1536x1024 background. The CSS offset was removed because translating the image exposed a strip at the card top. All projects now use the same image framing; verify optical alignment on desktop/mobile.
