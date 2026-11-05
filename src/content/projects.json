@@ -1,5 +1,14 @@
 [
   {
+    "id": "plannedwallet",
+    "title": "PlannedWallet",
+    "description": "PWA de finanças pessoais com planejamento mensal, contas e movimentações organizadas por espaço financeiro. Inclui importação e revisão de extratos, categorização e comparativos de receitas e despesas.",
+    "image": "/projects/plannedwallet-cover.avif",
+    "url": "https://mywallet-pilot.onrender.com/",
+    "technologies": ["React", "TypeScript", "NestJS", "PostgreSQL", "Supabase"],
+    "type": "project"
+  },
+  {
     "id": "how-much-love",
     "title": "HowMuchLove",
     "description": "SaaS focado em relacionamentos. Permite criar uma 'cápsula do tempo' com página personalizada, contador de relacionamento, galeria de fotos e música especial.",
