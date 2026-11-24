@@ -1,8 +1,6 @@
 import { siteConfig } from "@/src/config/site";
 import styles from "@/src/features/home/portfolio-page.module.css";
 
-import { BrandLogo } from "@/src/components/ui/brand-logo";
-
 const socialLinks = siteConfig.socialLinks;
 
 export function FooterSection() {
@@ -10,8 +8,8 @@ export function FooterSection() {
     <footer className={styles.footer}>
       <div className={styles.footerTop}>
         <div className={styles.footerBrand}>
-          <BrandLogo className={styles.footerLogo} />
-          <p className={styles.footerTagline}>Transformando ideias em sistemas de alta conversão.</p>
+          <strong>Breno Seren Martins</strong>
+          <p className={styles.footerTagline}>Desenvolvedor Full Stack · Aplicações web, e-commerces e integrações.</p>
         </div>
         <div className={styles.footerLinks}>
           <div className={styles.footerCol}>
@@ -21,7 +19,7 @@ export function FooterSection() {
             <a href="#contato" className={styles.footerLink}>Contato</a>
           </div>
           <div className={styles.footerCol}>
-            <h4 className={styles.footerColTitle}>Produtos</h4>
+            <h4 className={styles.footerColTitle}>Projetos</h4>
             <a href="https://howmuchlove.com.br" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>HowMuchLove</a>
             <a href="https://tastly.com.br" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>Tastly</a>
           </div>
@@ -35,7 +33,7 @@ export function FooterSection() {
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2026 BSM Studio, Todos os direitos reservados.</p>
+        <p>© 2026 Breno Seren Martins. Todos os direitos reservados.</p>
       </div>
     </footer>
   );

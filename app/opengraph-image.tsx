@@ -53,7 +53,7 @@ export default function Image() {
               letterSpacing: 0,
             }}
           >
-            SaaS, MVPs e landing pages de alta conversao
+            Desenvolvedor Full Stack
           </div>
           <div
             style={{
@@ -64,7 +64,7 @@ export default function Image() {
               fontWeight: 500,
             }}
           >
-            Software sob medida para validar rapido, vender melhor e escalar com consistencia.
+            Aplicações web, e-commerces e integrações. Conheça meus projetos e minha experiência profissional.
           </div>
         </div>
 

@@ -18,7 +18,7 @@ export function CtaSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Vamos construir o seu próximo produto de sucesso?
+          Vamos conversar?
         </motion.h2>
         <motion.p
           className={styles.ctaDesc}
@@ -27,14 +27,14 @@ export function CtaSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Agende uma consultoria gratuita conosco e descubra como podemos transformar sua ideia em um SaaS ou Landing Page de altíssima conversão.
+          Quer conversar sobre uma oportunidade profissional, um projeto ou uma integração? Entre em contato para trocarmos uma ideia.
         </motion.p>
         <motion.a
           href={siteConfig.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className={styles.primaryButton}
-          aria-label="Chamar a BSM Studio no WhatsApp"
+          aria-label="Conversar com Breno Seren Martins pelo WhatsApp"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

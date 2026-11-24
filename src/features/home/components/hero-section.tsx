@@ -3,16 +3,12 @@
 import { motion, useScroll, useVelocity, useSpring, useTransform, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useRef } from "react";
 import { siteConfig } from "@/src/config/site";
+import technologies from "@/src/content/technologies.json";
 import { MagneticWrapper } from "@/src/components/motion/magnetic-wrapper";
 import { ArrowIcon } from "@/src/components/icons/arrow-icon";
 import styles from "@/src/features/home/portfolio-page.module.css";
 
-const baseMarquee = [
-  "Next.js", "React", "TypeScript", "Node.js", "PostgreSQL",
-  "Supabase", "Framer Motion", "Figma", "Docker", "AWS",
-];
-
-const techMarquee = [...baseMarquee, ...baseMarquee, ...baseMarquee, ...baseMarquee];
+const techMarquee = [...technologies, ...technologies, ...technologies, ...technologies];
 
 const heroEntrance = {
   initial: { opacity: 0, y: 20, scale: 0.985, filter: "blur(8px)" },
@@ -34,7 +30,7 @@ function VelocityMarquee({ items, direction = 1, speed = 10 }: { items: string[]
 
   useAnimationFrame((t, delta) => {
     let moveBy = direction * speed * (delta / 1000);
-    moveBy += direction * (smoothVelocity.get() / 80) * (delta / 1000) * 2;
+    moveBy += direction * (smoothVelocity.get() / 80) * (delta / 1000) * 0.35;
     
     let newX = baseX.get() + moveBy;
     if (newX <= -50) newX += 50;
@@ -60,7 +56,7 @@ function VelocityMarquee({ items, direction = 1, speed = 10 }: { items: string[]
 }
 
 export function HeroSection() {
-  const titleWords = ["Transformamos", "ideias", "em"];
+  const titleWords = ["Breno", "Seren", "Martins"];
 
   return (
     <>
@@ -107,7 +103,7 @@ export function HeroSection() {
               transition={{ type: "spring", damping: 20, stiffness: 200 }}
               className={styles.heroTitleAccent}
             >
-              Sistemas de Alta Conversão.
+              Desenvolvedor Full Stack
             </motion.span>
           </motion.h1>
 
@@ -117,7 +113,7 @@ export function HeroSection() {
             animate={heroEntrance.animate}
             transition={{ ...heroEntrance.transition, delay: 0.6 }}
           >
-            Velocidade e escala para o seu negócio. Construímos MVPs, SaaS e Landing Pages premium para quem quer validar rápido e gerar caixa de verdade.
+            Desenvolvo aplicações web, e-commerces e integrações. Experiência com PHP, Node.js e React, conectando sistemas, evoluindo produtos e mantendo código em produção.
           </motion.p>
 
           <motion.div
@@ -132,9 +128,9 @@ export function HeroSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.primaryButton}
-                aria-label="Solicitar orçamento pelo WhatsApp"
+                aria-label="Entrar em contato com Breno pelo WhatsApp"
               >
-                Solicitar Orçamento
+                Entrar em contato
                 <ArrowIcon />
               </a>
             </MagneticWrapper>
@@ -142,9 +138,21 @@ export function HeroSection() {
               <a
                 href="#projetos"
                 className={styles.secondaryButton}
-                aria-label="Ver cases e projetos desenvolvidos"
+                aria-label="Ver projetos desenvolvidos"
               >
-                Ver Cases de Sucesso
+                Ver projetos
+              </a>
+            </MagneticWrapper>
+            <MagneticWrapper>
+              <a
+                href={siteConfig.socialLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.secondaryButton}
+                aria-label="Ver o GitHub de Breno Seren Martins (abre em nova aba)"
+              >
+                Ver GitHub
+                <ArrowIcon />
               </a>
             </MagneticWrapper>
           </motion.div>
@@ -152,8 +160,8 @@ export function HeroSection() {
       </section>
 
       <div className={styles.marqueeWrapper}>
-        <VelocityMarquee items={techMarquee} direction={-1} speed={4} />
-        <VelocityMarquee items={techMarquee} direction={1} speed={4} />
+        <VelocityMarquee items={techMarquee} direction={-1} speed={0.7} />
+        <VelocityMarquee items={techMarquee} direction={1} speed={0.7} />
       </div>
     </>
   );

@@ -21,9 +21,9 @@ export function ProjectsSection() {
           transition={{ duration: 0.6 }}
         >
           <p className={styles.sectionKicker}>Portfólio</p>
-          <h2 className={styles.sectionTitle}>Meus Trabalhos & Templates</h2>
+          <h2 className={styles.sectionTitle}>Projetos em destaque</h2>
           <p className={styles.sectionLead}>
-            Confira alguns dos projetos, sistemas e landing pages que desenvolvi.
+            Aplicações e produtos que mostram meu trabalho na prática.
           </p>
         </motion.div>
 

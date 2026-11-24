@@ -3,8 +3,8 @@
     "id": "plannedwallet",
     "title": "PlannedWallet",
     "description": "PWA de finanças pessoais com planejamento mensal, contas e movimentações organizadas por espaço financeiro. Inclui importação e revisão de extratos, categorização e comparativos de receitas e despesas.",
-    "image": "/projects/plannedwallet-cover-v3.avif",
-    "url": "https://mywallet-pilot.onrender.com/",
+    "image": "/projects/plannedwallet-cover-v4.avif",
+    "url": "https://plannedwallet.bsmstudio.cloud/",
     "technologies": ["React", "TypeScript", "NestJS", "PostgreSQL", "Supabase"],
     "type": "project"
   },

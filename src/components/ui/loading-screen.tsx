@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const letters = ["B", "S", "M"];
+const nameWords = ["Breno", "Seren", "Martins"];
 
 export function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true);
@@ -52,11 +52,26 @@ export function LoadingScreen() {
             }}
           />
 
-          {/* Letras B S M com stagger */}
-          <div style={{ display: "flex", gap: "clamp(0.3rem, 1vw, 0.6rem)", position: "relative" }}>
-            {letters.map((letter, i) => (
+          {/* Stagger the name by word while allowing narrow screens to wrap. */}
+          <div
+            aria-label="Breno Seren Martins"
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "0.1em 0.25em",
+              maxWidth: "100%",
+              paddingInline: "1.5rem",
+              position: "relative",
+              fontSize: "clamp(1.75rem, 5vw, 4rem)",
+              lineHeight: 1.15,
+              textAlign: "center",
+            }}
+          >
+            {nameWords.map((word, i) => (
               <motion.span
-                key={letter}
+                key={word}
+                aria-hidden="true"
                 initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 transition={{
@@ -65,19 +80,17 @@ export function LoadingScreen() {
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 style={{
-                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
                   fontWeight: 800,
                   letterSpacing: "-0.02em",
                   color: "#fff",
                   display: "inline-block",
                 }}
               >
-                {letter}
+                {word}
               </motion.span>
             ))}
           </div>
 
-          {/* Subtítulo "Studio" */}
           <motion.span
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 0.4, y: 0 }}
@@ -91,7 +104,7 @@ export function LoadingScreen() {
               marginTop: "0.6rem",
             }}
           >
-            Studio
+            Portfólio
           </motion.span>
 
           {/* Barra de progresso na base */}

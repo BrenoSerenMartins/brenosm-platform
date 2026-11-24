@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    "BSM Studio",
     "Breno Seren Martins",
-    "desenvolvimento SaaS",
-    "landing pages",
-    "MVP",
+    "desenvolvedor Full Stack",
+    "portfólio",
+    "PHP",
+    "Node.js",
     "Next.js",
     "React",
     "Magento",
@@ -100,29 +100,6 @@ const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "ProfessionalService",
-      "@id": `${siteConfig.url}/#studio`,
-      name: siteConfig.name,
-      url: siteConfig.url,
-      image: ogImageUrl,
-      email: siteConfig.contactEmail,
-      sameAs,
-      areaServed: {
-        "@type": "Country",
-        name: "Brasil",
-      },
-      founder: {
-        "@id": `${siteConfig.url}/#breno-seren-martins`,
-      },
-      serviceType: [
-        "Desenvolvimento de SaaS",
-        "Desenvolvimento de MVP",
-        "Landing pages de alta conversao",
-        "Sistemas web personalizados",
-        "Integracoes com Magento e ERPs",
-      ],
-    },
-    {
       "@type": "Person",
       "@id": `${siteConfig.url}/#breno-seren-martins`,
       name: "Breno Seren Martins",
@@ -130,9 +107,6 @@ const structuredData = {
       url: siteConfig.url,
       email: siteConfig.contactEmail,
       sameAs,
-      worksFor: {
-        "@id": `${siteConfig.url}/#studio`,
-      },
     },
   ],
 };
